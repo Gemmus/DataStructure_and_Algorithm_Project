@@ -1,1 +1,0 @@
-#include "01_array.h"

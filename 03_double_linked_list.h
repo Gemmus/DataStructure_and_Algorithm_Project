@@ -1,8 +1,5 @@
-//
-// Created by Gemma on 19/02/2024.
-//
-
-#ifndef DATASTRUCTALG_DOUBLE_LINKED_LIST_CPP_H
-#define DATASTRUCTALG_DOUBLE_LINKED_LIST_CPP_H
-
-#endif //DATASTRUCTALG_DOUBLE_LINKED_LIST_CPP_H
+template <class T>
+class DoubleLinkedList {
+public:
+private:
+};

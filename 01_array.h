@@ -1,0 +1,8 @@
+//
+// Created by Gemma on 19/02/2024.
+//
+
+#ifndef DATASTRUCTALG_01_ARRAY_H
+#define DATASTRUCTALG_01_ARRAY_H
+
+#endif //DATASTRUCTALG_01_ARRAY_H

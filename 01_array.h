@@ -5,6 +5,9 @@
 
 using namespace std;
 
+/***************************************/
+/*        class List interface         */
+/***************************************/
 template <class T>
 class List {
 public:
@@ -26,6 +29,9 @@ private:
     int partition(int low, int high);
 };
 
+/***************************************/
+/*      class List implementation      */
+/***************************************/
 template <class T>
 List<T>::List() {
     arrayCounter = 0;
@@ -41,42 +47,11 @@ const T &List<T>::operator[](const int& index) const {
 }
 
 template <class T>
-bool List<T>::insertOrdered(T item) {
-    if (arrayCounter >= MAX) {
-        return false;
+void List<T>::printer() {
+    for (int i = 0; i < arrayCounter; i++) {
+        cout << array[i] << " ";
     }
-
-    int i = arrayCounter - 1;
-    while (i >= 0 && array[i] > item) {
-        array[i + 1] = array[i];
-        i--;
-    }
-    array[i + 1] = item;
-    arrayCounter++;
-    return true;
-}
-
-template <class T>
-bool List<T>::insertToEnd(T item) {
-    if (arrayCounter < MAX) {
-        array[arrayCounter++] = item;
-        return true;
-    } else {
-        return false;
-    }
-}
-
-template <class T>
-bool List<T>::findIndexLinear(T item, int &index) {
-    if (arrayCounter > 0) {
-        for (int i = 0; i < arrayCounter; i++) {
-            if (array[i] == item) {
-                index = i;
-                return true;
-            }
-        }
-    }
-    return false;
+    cout << endl << endl;
 }
 
 template <class T>
@@ -108,7 +83,49 @@ int List<T>::partition(int low, int high) {
 }
 
 template <class T>
+bool List<T>::insertToEnd(T item) {
+    if (arrayCounter < MAX) {
+        array[arrayCounter++] = item;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+template <class T>
+bool List<T>::findIndexLinear(T item, int &index) {
+    if (arrayCounter > 0) {
+        for (int i = 0; i < arrayCounter; i++) {
+            if (array[i] == item) {
+                index = i;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+template <class T>
+bool List<T>::insertOrdered(T item) {
+    if (arrayCounter >= MAX) {
+        return false;
+    }
+
+    int i = arrayCounter - 1;
+    while (i >= 0 && array[i] > item) {
+        array[i + 1] = array[i];
+        i--;
+    }
+    array[i + 1] = item;
+    arrayCounter++;
+    return true;
+}
+
+template <class T>
 bool List<T>::findIndexBinary(T item, int& index) {
+    /* Ensure array is sorted */
+    //sort();
+
     int low = 0;
     int high = arrayCounter - 1;
     while (low <= high) {
@@ -124,12 +141,4 @@ bool List<T>::findIndexBinary(T item, int& index) {
         }
     }
     return false;
-}
-
-template <class T>
-void List<T>::printer() {
-    for (int i = 0; i < arrayCounter; i++) {
-        cout << array[i] << " ";
-    }
-    cout << endl << endl;
 }

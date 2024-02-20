@@ -1,7 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <chrono>
-#include <iostream>
+#include <iterator>
+#include <algorithm>
+#include <ctime>
 
 #include "json.hpp"
 #include "01_array.h"
@@ -10,12 +12,24 @@
 #include "04_ring_linked_list.h"
 #include "05_binary_tree.h"
 #include "06_hash_table.h"
+#include "random_generator.h"
 
 #define testDataSize 100
+#define RANDOM_MIN 0
+#define RANDOM_MAX 1000
 
 using namespace std;
 
 int main() {
+    /*********************/
+    /*  SEEDING RANDOM:  */
+    /*********************/
+    srand(time(nullptr));
+
+    vector<float> randomVector1(5);
+    generate(randomVector1.begin(), randomVector1.end(), RandomGenerator<float>(RANDOM_MIN, RANDOM_MAX));
+    copy(randomVector1.begin(), randomVector1.end(), ostream_iterator<float> (cout, " "));
+    cout << endl;
 
     /*********************/
     /*     TEST DATA:    */
@@ -131,7 +145,7 @@ int main() {
     /**********************/
     /* DOUBLE LINKED LIST */
     /**********************/
-#if 1
+#if 0
     cout << "Doubly linked list:" << endl;
 
     /* Linear search: */

@@ -55,24 +55,6 @@ build CMakeFiles/DataStructAlg.dir/main.cpp.obj: CXX_COMPILER__DataStructAlg_Deb
   OBJECT_DIR = CMakeFiles\DataStructAlg.dir
   OBJECT_FILE_DIR = CMakeFiles\DataStructAlg.dir
 
-build CMakeFiles/DataStructAlg.dir/04_ring_linked_list.cpp.obj: CXX_COMPILER__DataStructAlg_Debug C$:/Users/Gemma/Desktop/Projects/DataStructAlg/04_ring_linked_list.cpp || cmake_object_order_depends_target_DataStructAlg
-  DEP_FILE = CMakeFiles\DataStructAlg.dir\04_ring_linked_list.cpp.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
-  OBJECT_DIR = CMakeFiles\DataStructAlg.dir
-  OBJECT_FILE_DIR = CMakeFiles\DataStructAlg.dir
-
-build CMakeFiles/DataStructAlg.dir/05_binary_tree.cpp.obj: CXX_COMPILER__DataStructAlg_Debug C$:/Users/Gemma/Desktop/Projects/DataStructAlg/05_binary_tree.cpp || cmake_object_order_depends_target_DataStructAlg
-  DEP_FILE = CMakeFiles\DataStructAlg.dir\05_binary_tree.cpp.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
-  OBJECT_DIR = CMakeFiles\DataStructAlg.dir
-  OBJECT_FILE_DIR = CMakeFiles\DataStructAlg.dir
-
-build CMakeFiles/DataStructAlg.dir/06_hash_table.cpp.obj: CXX_COMPILER__DataStructAlg_Debug C$:/Users/Gemma/Desktop/Projects/DataStructAlg/06_hash_table.cpp || cmake_object_order_depends_target_DataStructAlg
-  DEP_FILE = CMakeFiles\DataStructAlg.dir\06_hash_table.cpp.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
-  OBJECT_DIR = CMakeFiles\DataStructAlg.dir
-  OBJECT_FILE_DIR = CMakeFiles\DataStructAlg.dir
-
 
 # =============================================================================
 # Link build statements for EXECUTABLE target DataStructAlg
@@ -81,7 +63,7 @@ build CMakeFiles/DataStructAlg.dir/06_hash_table.cpp.obj: CXX_COMPILER__DataStru
 #############################################
 # Link the executable DataStructAlg.exe
 
-build DataStructAlg.exe: CXX_EXECUTABLE_LINKER__DataStructAlg_Debug CMakeFiles/DataStructAlg.dir/main.cpp.obj CMakeFiles/DataStructAlg.dir/04_ring_linked_list.cpp.obj CMakeFiles/DataStructAlg.dir/05_binary_tree.cpp.obj CMakeFiles/DataStructAlg.dir/06_hash_table.cpp.obj
+build DataStructAlg.exe: CXX_EXECUTABLE_LINKER__DataStructAlg_Debug CMakeFiles/DataStructAlg.dir/main.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\DataStructAlg.dir

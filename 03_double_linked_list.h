@@ -187,7 +187,7 @@ DoubleLinkedList<T>& DoubleLinkedList<T>::insertOrdered(T item) {
 
 template <class T>
 bool DoubleLinkedList<T>::findIndexBinary(T item, int& index) const {
-    /* Ensure linked list is sorted */
+    /* Ensure doubly linked list is sorted */
     // sort();
 
     int low = 0;

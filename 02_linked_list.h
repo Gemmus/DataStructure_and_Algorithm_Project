@@ -172,7 +172,7 @@ LinkedList<T>& LinkedList<T>::insertOrdered(T item) {
 
 template <class T>
 bool LinkedList<T>::findIndexBinary(T item, int& index) const {
-    /* Ensure linked list is sorted */
+    /* Ensure singly linked list is sorted */
     // sort();
 
     int low = 0;

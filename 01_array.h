@@ -10,8 +10,6 @@ class List {
 public:
     List();
     ~List() = default;
-    bool isEmpty();
-    int sizeGetter();
     const T &operator[](const int& index) const;
     bool insertToEnd(T item);
     bool findIndex(T item, int& index);
@@ -25,20 +23,6 @@ private:
 template <class T>
 List<T>::List() {
     arrayCounter = 0;
-}
-
-template <class T>
-bool List<T>::isEmpty() {
-    if (arrayCounter == 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-template <class T>
-int List<T>::sizeGetter() {
-    return arrayCounter;
 }
 
 template <class T>
@@ -62,10 +46,12 @@ bool List<T>::insertToEnd(T item) {
 
 template <class T>
 bool List<T>::findIndex(T item, int& index) {
-    for (int i = 0; i < MAX; i++) {
-        if (array[i] == item) {
-            index = i;
-            return true;
+    if (arrayCounter > 0) {
+        for (int i = 0; i < arrayCounter; i++) {
+            if (array[i] == item) {
+                index = i;
+                return true;
+            }
         }
     }
     return false;
@@ -76,5 +62,5 @@ void List<T>::printer() {
     for (int i = 0; i < arrayCounter; i++) {
         cout << array[i] << " ";
     }
-    cout << endl;
+    cout << endl << endl;
 }

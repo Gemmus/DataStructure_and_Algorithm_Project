@@ -14,16 +14,16 @@ public:
     List();
     ~List() = default;
     const T &operator[](const int& index) const;
-    void printer();
+    void printer() const;
     void sort();
-    bool insertToEnd(T item);                   // For linear search
-    bool findIndexLinear(T item, int& index);   // For linear search
-    bool insertOrdered(T item);                 // For binary search
-    bool findIndexBinary(T item, int& index);   // For binary search
+    bool insertToEnd(T item);                           // For linear search
+    bool findIndexLinear(T item, int& index) const;     // For linear search
+    bool insertOrdered(T item);                         // For binary search
+    bool findIndexBinary(T item, int& index) const ;    // For binary search
 
 private:
-    int arrayCounter;
-    T array[MAX];
+    int     arrayCounter;
+    T       array[MAX];
 
     void quickSort(int low, int high);
     int partition(int low, int high);
@@ -47,7 +47,7 @@ const T &List<T>::operator[](const int& index) const {
 }
 
 template <class T>
-void List<T>::printer() {
+void List<T>::printer() const {
     for (int i = 0; i < arrayCounter; i++) {
         cout << array[i] << " ";
     }
@@ -93,7 +93,7 @@ bool List<T>::insertToEnd(T item) {
 }
 
 template <class T>
-bool List<T>::findIndexLinear(T item, int &index) {
+bool List<T>::findIndexLinear(T item, int &index) const {
     if (arrayCounter > 0) {
         for (int i = 0; i < arrayCounter; i++) {
             if (array[i] == item) {
@@ -122,7 +122,7 @@ bool List<T>::insertOrdered(T item) {
 }
 
 template <class T>
-bool List<T>::findIndexBinary(T item, int& index) {
+bool List<T>::findIndexBinary(T item, int& index) const {
     /* Ensure array is sorted */
     //sort();
 

@@ -8,12 +8,12 @@ class LinkedList {
 public:
     LinkedList();
     ~LinkedList();
-    void printer();
+    void printer() const;
     void sort();
-    LinkedList<T>& insertToEnd(T item);         // For linear search
-    bool findIndexLinear(T item, int& index);   // For linear search
-    LinkedList<T>& insertOrdered(T item);                 // For binary search
-    bool findIndexBinary(T item, int& index);   // For binary search
+    LinkedList<T>& insertToEnd(T item);                 // For linear search
+    bool findIndexLinear(T item, int& index) const;     // For linear search
+    LinkedList<T>& insertOrdered(T item);               // For binary search
+    bool findIndexBinary(T item, int& index) const;     // For binary search
 
 private:
     class Node {
@@ -29,7 +29,7 @@ private:
     Node *first;
     Node *last;
 
-    typename LinkedList<T>::Node*quickSort(Node* start, Node *end);
+    typename LinkedList<T>::Node* quickSort(Node* start, Node *end);
     typename LinkedList<T>::Node* partition(Node* start, Node* end);
 };
 
@@ -53,11 +53,11 @@ LinkedList<T>::~LinkedList() {
         first = aux;
     }
     llCounter = 0;
-    cout << "Deleted linked list" << endl;
+    //cout << "Deleted linked list" << endl;
 }
 
 template <class T>
-void LinkedList<T>::printer() {
+void LinkedList<T>::printer() const {
     Node *aux = first;
     while (aux != nullptr) {
         cout << aux->_value << " ";
@@ -128,7 +128,7 @@ LinkedList<T>& LinkedList<T>::insertToEnd(T item) {
 }
 
 template <class T>
-bool LinkedList<T>::findIndexLinear(T item, int& index) {
+bool LinkedList<T>::findIndexLinear(T item, int& index) const {
     Node *aux = first;
     int i = 0;
     while (llCounter > 0 && aux != nullptr) {
@@ -143,13 +143,13 @@ bool LinkedList<T>::findIndexLinear(T item, int& index) {
 }
 
 template <class T>
-LinkedList<T>& LinkedList<T>::insertOrdered(T item){
+LinkedList<T>& LinkedList<T>::insertOrdered(T item) {
     Node *newNode = new Node(item);
 
     if (first == nullptr || item < first->_value) {
         newNode->_pNext = first;
         first = newNode;
-        if(last == nullptr) {
+        if (last == nullptr) {
             last = newNode;
         }
         llCounter++;
@@ -171,7 +171,7 @@ LinkedList<T>& LinkedList<T>::insertOrdered(T item){
 }
 
 template <class T>
-bool LinkedList<T>::findIndexBinary(T item, int& index) {
+bool LinkedList<T>::findIndexBinary(T item, int& index) const {
     /* Ensure linked list is sorted */
     // sort();
 

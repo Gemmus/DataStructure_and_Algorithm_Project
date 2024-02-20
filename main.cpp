@@ -28,8 +28,8 @@ int main() {
     /***********************************/
     /* VARIABLES USED BY ALL CLASSES:  */
     /***********************************/
-    int index;
-    int searchedValue = 84; //Search for value
+    int     index;
+    int     searchedValue = 84; //Search for value
 
     /*********************/
     /*       ARRAY       */
@@ -81,8 +81,8 @@ int main() {
     /*********************/
     /*    LINKED LIST    */
     /*********************/
-#if 1
-    cout << "Linked list:" << endl;
+#if 0
+    cout << "Singly linked list:" << endl;
 
     /* Linear search: */
     LinkedList<int> linkedList1;
@@ -102,7 +102,7 @@ int main() {
 
     auto end02 = chrono::high_resolution_clock::now();
     auto duration02 = chrono::duration_cast<chrono::microseconds>(end02 - start02);
-    cout << "Linked list linear search time: " << duration02.count() << " ms" << endl;
+    cout << "Singly linked list linear search time: " << duration02.count() << " ms" << endl;
 
     /* Sort: */
     //linkedList1.sort();
@@ -125,16 +125,58 @@ int main() {
 
     end02 = chrono::high_resolution_clock::now();
     duration02 = chrono::duration_cast<chrono::microseconds>(end02 - start02);
-    cout << "Linked list binary search time: " << duration02.count() << " ms" << endl;
-
-
+    cout << "Singly linked list binary search time: " << duration02.count() << " ms" << endl;
 #endif
 
     /**********************/
     /* DOUBLE LINKED LIST */
     /**********************/
-#if 0
+#if 1
+    cout << "Doubly linked list:" << endl;
 
+    /* Linear search: */
+    DoubleLinkedList<int> doubleLinkedList1;
+
+    for (const auto &each : testData) {
+        doubleLinkedList1.insertToEnd(each);
+    }
+
+    //doubleLinkedList1.printer(); // works
+    //doubleLinkedList1.printReverse(); // works
+
+    auto start03 = chrono::high_resolution_clock ::now();
+
+    bool retval03 = doubleLinkedList1.findIndexLinear(searchedValue, index);
+    if (retval03) {
+        cout << searchedValue << " found at index: " << index << endl;
+    }
+
+    auto end03 = chrono::high_resolution_clock::now();
+    auto duration03 = chrono::duration_cast<chrono::microseconds>(end03 - start03);
+    cout << "Doubly linked list linear search time: " << duration03.count() << " ms" << endl;
+
+    /* Sort: */
+    //doubleLinkedList1.sort();
+    //cout << "Sort:" << endl;
+    //doubleLinkedList1.printer();
+
+    /* Binary search: */
+    DoubleLinkedList<int> doubleLinkedList2;
+
+    for (const auto &each : testData) {
+        doubleLinkedList2.insertOrdered(each);
+    }
+    //linkedList2.printer(); // works
+    start03 = chrono::high_resolution_clock ::now();
+
+    retval03 = doubleLinkedList2.findIndexBinary(searchedValue, index);
+    if (retval03) {
+        cout << searchedValue << " found at index: " << index << endl;
+    }
+
+    end03 = chrono::high_resolution_clock::now();
+    duration03 = chrono::duration_cast<chrono::microseconds>(end03 - start03);
+    cout << "Doubly linked list binary search time: " << duration03.count() << " ms" << endl;
 #endif
 
     /********************/

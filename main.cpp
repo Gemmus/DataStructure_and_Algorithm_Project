@@ -19,32 +19,51 @@ int main() {
 
     // TEST DATA:
     vector<int> testData(testDataSize);
-    for (int i = 0; i < testDataSize; i++) {
-        testData[i] = i;
+    for (int i = testDataSize - 1; i >= 0; i--) { // creates descending array1
+        testData[testDataSize - i - 1] = i;
     }
 
     // VARIABLES USED BY ALL CLASSES:
     int index;
-    int searchedValue = 1; //Search for value
+    int searchedValue = 84; //Search for value
 
     /* ARRAY */
-    List<int> array;
+    cout << "Array:" << endl;
 
+    // Linear search:
+    List<int> array1;
     for (const auto &each : testData) {
-        array.insertToEnd(each);
+        array1.insertToEnd(each);
     }
 
-    cout << "Array:" << endl;
-    //array.printer();
-
+    //array1.printer();
     auto start01 = chrono::high_resolution_clock ::now();
 
-    bool retval01 = array.findIndex(searchedValue, index);
-    cout << searchedValue << " found at index: " << retval01 << endl;
+    bool retval01 = array1.findIndexLinear(searchedValue, index);
+    if (retval01 == 1) {
+        cout << searchedValue << " found at index: " << index << endl;
+    }
 
     auto end01 = chrono::high_resolution_clock::now();
     auto duration01 = chrono::duration_cast<chrono::microseconds>(end01 - start01);
-    cout << "Array search time: " << duration01.count() << " ms" << endl << endl;
+    cout << "Array linear search time: " << duration01.count() << " ms" << endl;
+
+    // Binary search:
+    List<int> array2;
+    for (const auto &each : testData) {
+        array2.insertOrdered(each);
+    }
+
+    start01 = chrono::high_resolution_clock ::now();
+
+    retval01 = array2.findIndexBinary(searchedValue, index);
+    if (retval01 == 1) {
+        cout << searchedValue << " found at index: " << index << endl;
+    }
+
+    end01 = chrono::high_resolution_clock::now();
+    duration01 = chrono::duration_cast<chrono::microseconds>(end01 - start01);
+    cout << "Array binary search time: " << duration01.count() << " ms" << endl << endl;
 
     /* LINKED LIST */
     LinkedList<int> linkedList;
@@ -66,7 +85,7 @@ int main() {
     cout << "Linked list search time: " << duration02.count() << " ms" << endl;
 
     /* DOUBLE LINKED LIST */
-    
+
 
     /* RING LINKED LIST */
     /* BINARY SEARCH TREE */

@@ -19,6 +19,15 @@
 #define RANDOM_MAX 1000
 
 using namespace std;
+                            /***************************/
+                            /*       APPLICATION       */
+                            /***************************/
+
+/***************************/
+/*  FUNCTION DECLARATIONS  */
+/***************************/
+
+
 
 int main() {
     /*********************/
@@ -26,14 +35,19 @@ int main() {
     /*********************/
     srand(time(nullptr));
 
+    /*********************/
+    /*  TESTING RANDOM:  */
+    /*********************/
+#if 0
     vector<float> randomVector1(5);
     generate(randomVector1.begin(), randomVector1.end(), RandomGenerator<float>(RANDOM_MIN, RANDOM_MAX));
     copy(randomVector1.begin(), randomVector1.end(), ostream_iterator<float> (cout, " "));
     cout << endl;
+#endif
 
-    /*********************/
-    /*     TEST DATA:    */
-    /*********************/
+    /*****************************/
+    /*   GENERATING TEST DATA:   */
+    /*****************************/
     vector<int> testData(testDataSize);
     for (int i = testDataSize - 1; i >= 0; i--) { // creates descending array1
         testData[testDataSize - i - 1] = i;
@@ -52,20 +66,20 @@ int main() {
     cout << "Array:" << endl;
 
     /* Linear search: */
-    List<int> array1;
+    List<float> array1;
     for (const auto &each : testData) {
         array1.insertToEnd(each);
     }
 
     //array1.printer(); // works
-    auto start01 = chrono::high_resolution_clock ::now();
+    auto start01 = chrono::steady_clock ::now();
 
-    bool retval01 = array1.findIndexLinear(searchedValue, index);
+    bool retval01 = array1.findIndexLinear(static_cast<float>(searchedValue), index);
     if (retval01) {
         cout << searchedValue << " found at index: " << index << endl;
     }
 
-    auto end01 = chrono::high_resolution_clock::now();
+    auto end01 = chrono::steady_clock::now();
     auto duration01 = chrono::duration_cast<chrono::microseconds>(end01 - start01);
     cout << "Array linear search time: " << duration01.count() << " ms" << endl;
 
@@ -80,14 +94,14 @@ int main() {
         array2.insertOrdered(each);
     }
 
-    start01 = chrono::high_resolution_clock ::now();
+    start01 = chrono::steady_clock ::now();
 
     retval01 = array2.findIndexBinary(searchedValue, index);
     if (retval01) {
         cout << searchedValue << " found at index: " << index << endl;
     }
 
-    end01 = chrono::high_resolution_clock::now();
+    end01 = chrono::steady_clock::now();
     duration01 = chrono::duration_cast<chrono::microseconds>(end01 - start01);
     cout << "Array binary search time: " << duration01.count() << " ms" << endl << endl;
 #endif
@@ -99,22 +113,22 @@ int main() {
     cout << "Singly linked list:" << endl;
 
     /* Linear search: */
-    LinkedList<int> linkedList1;
+    LinkedList<float> linkedList1;
 
     for (const auto &each : testData) {
-        linkedList1.insertToEnd(each);
+        linkedList1.insertToEnd(static_cast<float>(each));
     }
 
     //linkedList1.printer(); // works
 
-    auto start02 = chrono::high_resolution_clock ::now();
+    auto start02 = chrono::steady_clock ::now();
 
-    bool retval02 = linkedList1.findIndexLinear(searchedValue, index);
+    bool retval02 = linkedList1.findIndexLinear(static_cast<float>(searchedValue), index);
     if (retval02) {
         cout << searchedValue << " found at index: " << index << endl;
     }
 
-    auto end02 = chrono::high_resolution_clock::now();
+    auto end02 = chrono::steady_clock::now();
     auto duration02 = chrono::duration_cast<chrono::microseconds>(end02 - start02);
     cout << "Singly linked list linear search time: " << duration02.count() << " ms" << endl;
 
@@ -130,14 +144,14 @@ int main() {
         linkedList2.insertOrdered(each);
     }
     //linkedList2.printer(); // works
-    start02 = chrono::high_resolution_clock ::now();
+    start02 = chrono::steady_clock ::now();
 
     retval02 = linkedList2.findIndexBinary(searchedValue, index);
     if (retval02) {
         cout << searchedValue << " found at index: " << index << endl;
     }
 
-    end02 = chrono::high_resolution_clock::now();
+    end02 = chrono::steady_clock::now();
     duration02 = chrono::duration_cast<chrono::microseconds>(end02 - start02);
     cout << "Singly linked list binary search time: " << duration02.count() << " ms" << endl;
 #endif
@@ -149,23 +163,23 @@ int main() {
     cout << "Doubly linked list:" << endl;
 
     /* Linear search: */
-    DoubleLinkedList<int> doubleLinkedList1;
+    DoubleLinkedList<float> doubleLinkedList1;
 
     for (const auto &each : testData) {
-        doubleLinkedList1.insertToEnd(each);
+        doubleLinkedList1.insertToEnd(static_cast<float>(each));
     }
 
     //doubleLinkedList1.printer(); // works
     //doubleLinkedList1.printReverse(); // works
 
-    auto start03 = chrono::high_resolution_clock ::now();
+    auto start03 = chrono::steady_clock ::now();
 
-    bool retval03 = doubleLinkedList1.findIndexLinear(searchedValue, index);
+    bool retval03 = doubleLinkedList1.findIndexLinear(static_cast<float>(searchedValue), index);
     if (retval03) {
         cout << searchedValue << " found at index: " << index << endl;
     }
 
-    auto end03 = chrono::high_resolution_clock::now();
+    auto end03 = chrono::steady_clock::now();
     auto duration03 = chrono::duration_cast<chrono::microseconds>(end03 - start03);
     cout << "Doubly linked list linear search time: " << duration03.count() << " ms" << endl;
 
@@ -181,14 +195,14 @@ int main() {
         doubleLinkedList2.insertOrdered(each);
     }
     //linkedList2.printer(); // works
-    start03 = chrono::high_resolution_clock ::now();
+    start03 = chrono::steady_clock ::now();
 
     retval03 = doubleLinkedList2.findIndexBinary(searchedValue, index);
     if (retval03) {
         cout << searchedValue << " found at index: " << index << endl;
     }
 
-    end03 = chrono::high_resolution_clock::now();
+    end03 = chrono::steady_clock::now();
     duration03 = chrono::duration_cast<chrono::microseconds>(end03 - start03);
     cout << "Doubly linked list binary search time: " << duration03.count() << " ms" << endl;
 #endif

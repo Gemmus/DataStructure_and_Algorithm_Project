@@ -55,105 +55,191 @@ int main() {
     /*********************/
     srand(time(nullptr));
 
-    /*********************/
-    /*  TESTING RANDOM:  */
-    /*********************/
-#if 1
-    vector<int> testData(testDataSize);
-    generate(testData.begin(), testData.end(), RandomGenerator<float>(RANDOM_MIN, RANDOM_MAX));
-    copy(testData.begin(), testData.end(), ostream_iterator<float> (cout, " "));
-    cout << endl;
+    /**********************/
+    /*  GENERATE RANDOM:  */
+    /**********************/
+#if 0
+    vector<int> IntRandData(testDataSize);
+    generate(IntRandData.begin(), IntRandData.end(), RandomGenerator<float>(RANDOM_MIN, RANDOM_MAX));
+    copy(IntRandData.begin(), IntRandData.end(), ostream_iterator<float> (cout, " "));
 
     int index, searchedValue;
-    cout << "index: ";
+    cout << "\nEnter index: ";
     cin >> index;
-    searchedValue = testData[index];
+    searchedValue = IntRandData[index];
     cout << searchedValue << endl;
 #endif
 
 #if 0
-    vector<double> testData2(testDataSize);
-    generate(testData2.begin(), testData2.end(), RandomGenerator<float>(RANDOM_MIN, RANDOM_MAX));
-    copy(testData2.begin(), testData2.end(), ostream_iterator<float> (cout, " "));
+    vector<float> FloatRandData(testDataSize);
+    generate(FloatRandData.begin(), FloatRandData.end(), RandomGenerator<float>(RANDOM_MIN, RANDOM_MAX));
+    copy(FloatRandData.begin(), FloatRandData.end(), ostream_iterator<float> (cout, " "));
     cout << endl;
 
-    double sV;
-    cout << "sV: ";
-    cin >> sV;
+    int floatIndex;
+    float floatSearchValue;
+    cout << "\nEnter float index: ";
+    cin >> floatIndex;
+    floatSearchValue = FloatRandData[floatIndex];
+#endif
+
+#if 0
+    vector<double> DoubleRandData(testDataSize);
+    generate(DoubleRandData.begin(), DoubleRandData.end(), RandomGenerator<float>(RANDOM_MIN, RANDOM_MAX));
+    copy(DoubleRandData.begin(), DoubleRandData.end(), ostream_iterator<float> (cout, " "));
+    cout << endl;
+
+    int doubleIndex;
+    double doubleSearchValue;
+    cout << "\nEnter double index: ";
+    cin >> doubleIndex;
+    doubleSearchValue = DoubleRandData[doubleIndex];
 #endif
 
     /*****************************/
     /*   GENERATING TEST DATA:   */
     /*****************************/
-#if 0
-    vector<int> testData(testDataSize);
+#if 1
+    vector<int> IntRandData(testDataSize);
     for (int i = testDataSize - 1; i >= 0; i--) { // creates descending array1
-        testData[testDataSize - i - 1] = i;
+        IntRandData[testDataSize - i - 1] = i;
     }
 
-    vector<double> testData2(testDataSize);
+    vector<float> FloatRandData(testDataSize);
     for (int i = testDataSize - 1; i >= 0; i--) { // creates descending array1
-        testData2[testDataSize - i - 1] = i;
+        FloatRandData[testDataSize - i - 1] = static_cast<float>(i);
     }
 
-    const int searchedValue = 4848; //Search for value
-    const double sV = 4848.00;
+    vector<double> DoubleRandData(testDataSize);
+    for (int i = testDataSize - 1; i >= 0; i--) { // creates descending array1
+        DoubleRandData[testDataSize - i - 1] = i;
+    }
+
+    int searchedValue = IntRandData[15]; //Search for value
+    float floatSearchValue = FloatRandData[15];
+    double doubleSearchValue = DoubleRandData[15];
 #endif
 
-
+#if 0   // INTEGERS
     /*********************/
     /*       ARRAY       */
     /*********************/
-#if 1
-    arrayLinear(testData, searchedValue);
-    //arrayLinear(testData2, sV);
-    arrayBinary(testData, searchedValue);
-    //arrayBinary(testData2, sV);
-#endif
+
+    arrayLinear(IntRandData, searchedValue);
+    arrayBinary(IntRandData, searchedValue);
 
     /********************/
     /*  CIRCULAR ARRAY  */
     /********************/
-#if 1
-    circArrayLinear(testData, searchedValue);
-    //circArrayLinear(testData2, sV);
-    circArrayBinary(testData, searchedValue);
-    //circArrayBinary(testData2, sV);
-#endif
+
+    circArrayLinear(IntRandData, searchedValue);
+    circArrayBinary(IntRandData, searchedValue);
 
     /*********************/
     /*    LINKED LIST    */
     /*********************/
-#if 1
-    linkedListLinear(testData, searchedValue);
-    //linkedListLinear(testData2, sV);
-    linkedListBinary(testData, searchedValue);
-    //linkedListBinary(testData2, sV);
-#endif
+
+    linkedListLinear(IntRandData, searchedValue);
+    linkedListBinary(IntRandData, searchedValue);
 
     /**********************/
     /* DOUBLE LINKED LIST */
     /**********************/
-#if 1
-    doubleLinkedListLinear(testData, searchedValue);
-    //doubleLinkedListLinear(testData2, sV);
-    doubleLinkedListBinary(testData, searchedValue);
-    //doubleLinkedListBinary(testData2, sV);
-#endif
+
+    doubleLinkedListLinear(IntRandData, searchedValue);
+    doubleLinkedListBinary(IntRandData, searchedValue);
 
     /**********************/
     /* BINARY SEARCH TREE */
     /**********************/
-#if 1
 
-#endif
 
     /**************/
     /* HASH TABLE */
     /**************/
-#if 1
 
 #endif
+
+#if 1  // FLOAT
+    /*********************/
+    /*       ARRAY       */
+    /*********************/
+
+    arrayLinear(FloatRandData, floatSearchValue);
+    arrayBinary(FloatRandData, floatSearchValue);
+
+    /********************/
+    /*  CIRCULAR ARRAY  */
+    /********************/
+
+    circArrayLinear(FloatRandData, floatSearchValue);
+    circArrayBinary(FloatRandData, floatSearchValue);
+
+    /*********************/
+    /*    LINKED LIST    */
+    /*********************/
+
+    linkedListLinear(FloatRandData, floatSearchValue);
+    linkedListBinary(FloatRandData, floatSearchValue);
+
+    /**********************/
+    /* DOUBLE LINKED LIST */
+    /**********************/
+
+    doubleLinkedListLinear(FloatRandData, floatSearchValue);
+    doubleLinkedListBinary(FloatRandData, floatSearchValue);
+
+
+    /**********************/
+    /* BINARY SEARCH TREE */
+    /**********************/
+
+
+    /**************/
+    /* HASH TABLE */
+    /**************/
+#endif
+
+#if 0  // DOUBLE
+    /*********************/
+    /*       ARRAY       */
+    /*********************/
+
+    arrayLinear(DoubleRandData, doubleSearchValue);
+    arrayBinary(DoubleRandData, doubleSearchValue);
+
+    /********************/
+    /*  CIRCULAR ARRAY  */
+    /********************/
+
+    circArrayLinear(DoubleRandData, doubleSearchValue);
+    circArrayBinary(DoubleRandData, doubleSearchValue);
+
+    /*********************/
+    /*    LINKED LIST    */
+    /*********************/
+
+    linkedListLinear(DoubleRandData, doubleSearchValue);
+    linkedListBinary(DoubleRandData, doubleSearchValue);
+
+    /**********************/
+    /* DOUBLE LINKED LIST */
+    /**********************/
+
+    doubleLinkedListLinear(DoubleRandData, doubleSearchValue);
+    doubleLinkedListBinary(DoubleRandData, doubleSearchValue);
+
+
+    /**********************/
+    /* BINARY SEARCH TREE */
+    /**********************/
+
+
+    /**************/
+    /* HASH TABLE */
+    /**************/
+#endif
+
 
     return 0;
 }
@@ -222,7 +308,7 @@ void arrayLinear(const vector<T>& Data, const T& searchValue) {
 }
 
 template<typename T>
-void arrayBinary(const vector<T>& Data, const T& searchValue) {
+void arrayBinary(const vector<T>& testData, const T& searchedValue) {
     cout << "ARRAY BINARY SEARCH:" << endl;
 
     /******************/
@@ -236,7 +322,7 @@ void arrayBinary(const vector<T>& Data, const T& searchValue) {
 
     /* Initialize array */
     auto start = chrono::high_resolution_clock::now();
-    for (const auto &each : Data) {
+    for (const auto &each : testData) {
         array.insertOrdered(each);
     }
     auto end = chrono::high_resolution_clock::now();
@@ -247,7 +333,7 @@ void arrayBinary(const vector<T>& Data, const T& searchValue) {
     /* Measure execution times */
     for (int i = 0; i < measureN; i++) {
         start = chrono::high_resolution_clock::now();
-        bool retval = array.findIndexBinary(searchValue, index);
+        bool retval = array.findIndexBinary(searchedValue, index);
         end = chrono::high_resolution_clock::now();
         duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
         if (retval) {

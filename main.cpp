@@ -17,9 +17,8 @@
 #include "06_hash_table.h"
 #include "random_generator.h"
 
-#define testDataSize    100000
 #define RANDOM_MIN      0
-#define RANDOM_MAX      1000000
+#define RANDOM_MAX      100000
 #define measureN        30
 
 using namespace std;
@@ -31,21 +30,13 @@ using namespace std;
 /*  FUNCTION DECLARATIONS  */
 /***************************/
 template <typename T>
-void arrayLinear(const vector<T>&, const T&);
+void arraySearch(const vector<T>&, const T&, const int&);
 template <typename T>
-void arrayBinary(const vector<T>&, const T&);
+void circArraySearch(const vector<T>&, const T&, const int&);
 template <typename T>
-void circArrayLinear(const vector<T>&, const T&);
+void linkedListSearch(const vector<T>&, const T&, const int&);
 template <typename T>
-void circArrayBinary(const vector<T>&, const T&);
-template <typename T>
-void linkedListLinear(const vector<T>&, const T&);
-template <typename T>
-void linkedListBinary(const vector<T>&, const T&);
-template <typename T>
-void doubleLinkedListLinear(const vector<T>&, const T&);
-template <typename T>
-void doubleLinkedListBinary(const vector<T>&, const T&);
+void doubleLinkedListSearch(const vector<T>&, const T&, const int&);
 template <typename T>
 void displayVector(const vector<T>&);
 void displayMeasuredTimes(const double&, const double&);
@@ -59,67 +50,54 @@ int main() {
     /*********************/
     srand(time(nullptr));
 
-    /**********************/
-    /*  GENERATE RANDOM:  */
-    /**********************/
+    /***********************/
+    /*  SET DYNAMIC VALUE  */
+    /***********************/
+    int testDataSize = 50000;
+    int datatype = 3;  // 1: integer, 2: float, 3: double
+    int index = 24690;
+
+    /*******************************/
+    /*  GENERATE RANDOM TEST DATA  */
+    /*******************************/
 #if 0
     vector<int> IntRandData(testDataSize);
     generate(IntRandData.begin(), IntRandData.end(), RandomGenerator<float>(RANDOM_MIN, RANDOM_MAX));
     copy(IntRandData.begin(), IntRandData.end(), ostream_iterator<float> (cout, " "));
 
-    int index, searchedValue;
-    cout << "\nEnter index: ";
-    cin >> index;
-    searchedValue = IntRandData[index];
-    cout << searchedValue << endl;
-#endif
+    int searchedValue = IntRandData[index];
 
-#if 0
     vector<float> FloatRandData(testDataSize);
     generate(FloatRandData.begin(), FloatRandData.end(), RandomGenerator<float>(RANDOM_MIN, RANDOM_MAX));
     copy(FloatRandData.begin(), FloatRandData.end(), ostream_iterator<float> (cout, " "));
     cout << endl;
 
-    int floatIndex;
-    float floatSearchValue;
-    cout << "\nEnter float index: ";
-    cin >> floatIndex;
-    floatSearchValue = FloatRandData[floatIndex];
-#endif
+    float floatSearchValue = FloatRandData[index];
 
-#if 0
     vector<double> DoubleRandData(testDataSize);
     generate(DoubleRandData.begin(), DoubleRandData.end(), RandomGenerator<float>(RANDOM_MIN, RANDOM_MAX));
     copy(DoubleRandData.begin(), DoubleRandData.end(), ostream_iterator<float> (cout, " "));
     cout << endl;
 
-    int doubleIndex;
-    double doubleSearchValue;
-    cout << "\nEnter double index: ";
-    cin >> doubleIndex;
-    doubleSearchValue = DoubleRandData[doubleIndex];
+    double doubleSearchValue = DoubleRandData[index];
 #endif
 
-    /*****************************/
-    /*   GENERATING TEST DATA:   */
-    /*****************************/
+    /****************************/
+    /*   GENERATING TEST DATA   */
+    /****************************/
 #if 1
     vector<int> IntRandData(testDataSize);
     for (int i = testDataSize - 1; i >= 0; i--) { // creates descending array
         IntRandData[testDataSize - i - 1] = i;
     }
     int searchedValue = IntRandData[15];
-#endif
 
-#if 1
     vector<float> FloatRandData(testDataSize);
     for (int i = testDataSize - 1; i >= 0; i--) { // creates descending array
         FloatRandData[testDataSize - i - 1] = static_cast<float>(i);
     }
     float floatSearchValue = FloatRandData[15];
-#endif
 
-#if 1
     vector<double> DoubleRandData(testDataSize);
     for (int i = testDataSize - 1; i >= 0; i--) { // creates descending array
         DoubleRandData[testDataSize - i - 1] = i;
@@ -128,11 +106,8 @@ int main() {
 #endif
 
     /*****************************/
-    /*      SELECT DATATYPE      */
+    /*      DATATYPE SWITCH      */
     /*****************************/
-
-    int datatype = 3;  // 1: integer, 2: float, 3: double
-
     switch(datatype) {
         case 1:
             cout << "---------------------------------------------------------------" << endl;
@@ -140,20 +115,20 @@ int main() {
             cout << "---------------------------------------------------------------" << endl;
 
             /*       ARRAY       */
-            arrayLinear(IntRandData, searchedValue);
-            arrayBinary(IntRandData, searchedValue);
+            arraySearch(IntRandData, searchedValue, 1);
+            arraySearch(IntRandData, searchedValue, 2);
 
             /*  CIRCULAR ARRAY  */
-            circArrayLinear(IntRandData, searchedValue);
-            circArrayBinary(IntRandData, searchedValue);
+            circArraySearch(IntRandData, searchedValue, 1);
+            circArraySearch(IntRandData, searchedValue, 2);
 
             /*    LINKED LIST    */
-            linkedListLinear(IntRandData, searchedValue);
-            linkedListBinary(IntRandData, searchedValue);
+            linkedListSearch(IntRandData, searchedValue, 1);
+            linkedListSearch(IntRandData, searchedValue, 2);
 
             /* DOUBLE LINKED LIST */
-            doubleLinkedListLinear(IntRandData, searchedValue);
-            doubleLinkedListBinary(IntRandData, searchedValue);
+            doubleLinkedListSearch(IntRandData, searchedValue, 1);
+            doubleLinkedListSearch(IntRandData, searchedValue, 2);
 
             /* BINARY SEARCH TREE */
 
@@ -168,20 +143,20 @@ int main() {
             cout << "---------------------------------------------------------------" << endl;
 
             /*       ARRAY       */
-            arrayLinear(FloatRandData, floatSearchValue);
-            arrayBinary(FloatRandData, floatSearchValue);
+            arraySearch(FloatRandData, floatSearchValue, 1);
+            arraySearch(FloatRandData, floatSearchValue, 2);
 
             /*  CIRCULAR ARRAY  */
-            circArrayLinear(FloatRandData, floatSearchValue);
-            circArrayBinary(FloatRandData, floatSearchValue);
+            circArraySearch(FloatRandData, floatSearchValue, 1);
+            circArraySearch(FloatRandData, floatSearchValue, 2);
 
             /*    LINKED LIST    */
-            linkedListLinear(FloatRandData, floatSearchValue);
-            linkedListBinary(FloatRandData, floatSearchValue);
+            linkedListSearch(FloatRandData, floatSearchValue, 1);
+            linkedListSearch(FloatRandData, floatSearchValue, 2);
 
             /* DOUBLE LINKED LIST */
-            doubleLinkedListLinear(FloatRandData, floatSearchValue);
-            doubleLinkedListBinary(FloatRandData, floatSearchValue);
+            doubleLinkedListSearch(FloatRandData, floatSearchValue, 1);
+            doubleLinkedListSearch(FloatRandData, floatSearchValue, 2);
 
             /* BINARY SEARCH TREE */
 
@@ -193,20 +168,20 @@ int main() {
             cout << "---------------------------------------------------------------" << endl;
 
             /*       ARRAY       */
-            arrayLinear(DoubleRandData, doubleSearchValue);
-            arrayBinary(DoubleRandData, doubleSearchValue);
+            arraySearch(DoubleRandData, doubleSearchValue, 1);
+            arraySearch(DoubleRandData, doubleSearchValue, 2);
 
             /*  CIRCULAR ARRAY  */
-            circArrayLinear(DoubleRandData, doubleSearchValue);
-            circArrayBinary(DoubleRandData, doubleSearchValue);
+            circArraySearch(DoubleRandData, doubleSearchValue, 1);
+            circArraySearch(DoubleRandData, doubleSearchValue, 2);
 
             /*    LINKED LIST    */
-            linkedListLinear(DoubleRandData, doubleSearchValue);
-            linkedListBinary(DoubleRandData, doubleSearchValue);
+            linkedListSearch(DoubleRandData, doubleSearchValue, 1);
+            linkedListSearch(DoubleRandData, doubleSearchValue, 2);
 
             /* DOUBLE LINKED LIST */
-            doubleLinkedListLinear(DoubleRandData, doubleSearchValue);
-            doubleLinkedListBinary(DoubleRandData, doubleSearchValue);
+            doubleLinkedListSearch(DoubleRandData, doubleSearchValue, 1);
+            doubleLinkedListSearch(DoubleRandData, doubleSearchValue, 2);
 
             /* BINARY SEARCH TREE */
 
@@ -221,86 +196,59 @@ int main() {
     return 0;
 }
 
+/******************************/
+/*  FUNCTION IMPLEMENTATIONS  */
+/******************************/
 template <typename T>
-void arrayLinear(const vector<T>& Data, const T& searchValue) {
-    cout << "ARRAY LINEAR SEARCH:" << endl;
-
-    /******************/
-    /* Linear search: */
-    /******************/
+void arraySearch(const vector<T>& Data, const T& searchValue, const int& mode) {
     vector<double>  execTimes;
     List<T>         array;
     double          insertTime;
     double          mean;
     int             index;
 
-    /* Initialize array */
-    auto start = chrono::high_resolution_clock::now();
-    for (const auto &each : Data) {
-        array.insertToEnd(each);
-    }
-    auto end = chrono::high_resolution_clock::now();
-    auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-    insertTime = static_cast<double>(duration.count());
-
-    /* Measure execution times */
-    for (int i = 0; i < measureN; i++) {
-        start = chrono::high_resolution_clock::now();
-        bool retval = array.findIndexLinear(searchValue, index);
-        end = chrono::high_resolution_clock::now();
-        duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-        if (retval) {
-            execTimes.push_back(static_cast<double>(duration.count()));
+    /* Display header, Initialize array and Measure execution times */
+    if (mode == 1) {
+        /* Display header */
+        cout << "ARRAY LINEAR SEARCH:" << endl;
+        /* Initialize array */
+        auto start = chrono::high_resolution_clock::now();
+        for (const auto &each : Data) {
+            array.insertToEnd(each);
         }
-    }
-
-    /* Sort and discard largest 1/3 */
-    sort(execTimes.begin(), execTimes.end());
-    execTimes.erase(execTimes.end() - static_cast<int>(measureN / 3), execTimes.end());
-
-    /* Calculate and display mean */
-    mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double)execTimes.size();
-    displayMeasuredTimes(insertTime, mean);
-
-    /*********/
-    /* Sort: */
-    /*********/
-    //array.sort();
-    //cout << "Sort:" << endl;
-    //array.printer();
-}
-
-template<typename T>
-void arrayBinary(const vector<T>& testData, const T& searchedValue) {
-    cout << "ARRAY BINARY SEARCH:" << endl;
-
-    /******************/
-    /* Binary search: */
-    /******************/
-    vector<double>  execTimes;
-    List<T>         array;
-    double          insertTime;
-    double          mean;
-    int             index;
-
-    /* Initialize array */
-    auto start = chrono::high_resolution_clock::now();
-    for (const auto &each : testData) {
-        array.insertOrdered(each);
-    }
-    auto end = chrono::high_resolution_clock::now();
-    auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-    insertTime = static_cast<double>(duration.count());
-    cout << "Insertion time: " << insertTime << " ns" << endl;
-
-    /* Measure execution times */
-    for (int i = 0; i < measureN; i++) {
-        start = chrono::high_resolution_clock::now();
-        bool retval = array.findIndexBinary(searchedValue, index);
-        end = chrono::high_resolution_clock::now();
-        duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-        if (retval) {
-            execTimes.push_back(static_cast<double>(duration.count()));
+        auto end = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+        insertTime = static_cast<double>(duration.count());
+        /* Measure execution times */
+        for (int i = 0; i < measureN; i++) {
+            start = chrono::high_resolution_clock::now();
+            bool retval = array.findIndexLinear(searchValue, index);
+            end = chrono::high_resolution_clock::now();
+            duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+            if (retval) {
+                execTimes.push_back(static_cast<double>(duration.count()));
+            }
+        }
+    } else if (mode == 2) {
+        /* Display header */
+        cout << "ARRAY BINARY SEARCH:" << endl;
+        /* Initialize array */
+        auto start = chrono::high_resolution_clock::now();
+        for (const auto &each : Data) {
+            array.insertOrdered(each);
+        }
+        auto end = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+        insertTime = static_cast<double>(duration.count());
+        /* Measure execution times */
+        for (int i = 0; i < measureN; i++) {
+            start = chrono::high_resolution_clock::now();
+            bool retval = array.findIndexBinary(searchValue, index);
+            end = chrono::high_resolution_clock::now();
+            duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+            if (retval) {
+                execTimes.push_back(static_cast<double>(duration.count()));
+            }
         }
     }
 
@@ -314,85 +262,55 @@ void arrayBinary(const vector<T>& testData, const T& searchedValue) {
 }
 
 template <typename T>
-void circArrayLinear(const vector<T>& Data, const T& searchValue) {
-    cout << "CIRCULAR ARRAY LINEAR SEARCH:" << endl;
-
-    /******************/
-    /* Linear search: */
-    /******************/
-
+void circArraySearch(const vector<T>& Data, const T& searchValue, const int& mode) {
     vector<double>      execTimes;
     CircList<T>         circArray;
     double              insertTime;
     double              mean;
     int                 index;
 
-    /* Initialize array */
-    auto start = chrono::high_resolution_clock::now();
-    for (const auto &each : Data) {
-        circArray.insertToEnd(each);
-    }
-    auto end = chrono::high_resolution_clock::now();
-    auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-    insertTime = static_cast<double>(duration.count());
-
-    /* Measure execution times */
-    for (int i = 0; i < measureN; i++) {
-        start = chrono::high_resolution_clock::now();
-        bool retval = circArray.findIndexLinear(static_cast<float>(searchValue), index);
-        end = chrono::high_resolution_clock::now();
-        duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-        if (retval) {
-            execTimes.push_back(static_cast<double>(duration.count()));
+    /* Display header, Initialize array and Measure execution times */
+    if (mode == 1) {
+        /* Display header */
+        cout << "CIRCULAR ARRAY LINEAR SEARCH:" << endl;
+        /* Initialize array */
+        auto start = chrono::high_resolution_clock::now();
+        for (const auto &each : Data) {
+            circArray.insertToEnd(each);
         }
-    }
-
-    /* Sort and discard largest 1/3 */
-    sort(execTimes.begin(), execTimes.end());
-    execTimes.erase(execTimes.end() - static_cast<int>(measureN / 3), execTimes.end());
-
-    /* Calculate and display mean */
-    mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double)execTimes.size();
-    displayMeasuredTimes(insertTime, mean);
-
-    /*********/
-    /* Sort: */
-    /*********/
-    //circArray.sort();
-    //cout << "Sort:" << endl;
-    //circArray.printer();
-}
-
-template <typename T>
-void circArrayBinary(const vector<T>& Data, const T& searchValue) {
-    cout << "CIRCULAR ARRAY BINARY SEARCH:" << endl;
-
-    /******************/
-    /* Linear search: */
-    /******************/
-    vector<double>      execTimes;
-    CircList<T>         circArray;
-    double              insertTime;
-    double              mean;
-    int                 index;
-
-    /* Initialize array */
-    auto start = chrono::high_resolution_clock::now();
-    for (const auto &each : Data) {
-        circArray.insertOrdered(each);
-    }
-    auto end = chrono::high_resolution_clock::now();
-    auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-    insertTime = static_cast<double>(duration.count());
-
-    /* Measure execution times */
-    for (int i = 0; i < measureN; i++) {
-        start = chrono::high_resolution_clock::now();
-        bool retval = circArray.findIndexBinary(static_cast<float>(searchValue), index);
-        end = chrono::high_resolution_clock::now();
-        duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-        if (retval) {
-            execTimes.push_back(static_cast<double>(duration.count()));
+        auto end = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+        insertTime = static_cast<double>(duration.count());
+        /* Measure execution times */
+        for (int i = 0; i < measureN; i++) {
+            start = chrono::high_resolution_clock::now();
+            bool retval = circArray.findIndexLinear(static_cast<float>(searchValue), index);
+            end = chrono::high_resolution_clock::now();
+            duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+            if (retval) {
+                execTimes.push_back(static_cast<double>(duration.count()));
+            }
+        }
+    } else if (mode == 2){
+        /* Display header */
+        cout << "CIRCULAR ARRAY BINARY SEARCH:" << endl;
+        /* Initialize array */
+        auto start = chrono::high_resolution_clock::now();
+        for (const auto &each : Data) {
+            circArray.insertOrdered(each);
+        }
+        auto end = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+        insertTime = static_cast<double>(duration.count());
+        /* Measure execution times */
+        for (int i = 0; i < measureN; i++) {
+            start = chrono::high_resolution_clock::now();
+            bool retval = circArray.findIndexBinary(static_cast<float>(searchValue), index);
+            end = chrono::high_resolution_clock::now();
+            duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+            if (retval) {
+                execTimes.push_back(static_cast<double>(duration.count()));
+            }
         }
     }
 
@@ -406,84 +324,55 @@ void circArrayBinary(const vector<T>& Data, const T& searchValue) {
 }
 
 template <typename T>
-void linkedListLinear(const vector<T>& Data, const T& searchValue) {
-    cout << "SINGLY LINKED LIST LINEAR SEARCH:" << endl;
-
-    /******************/
-    /* Linear search: */
-    /******************/
+void linkedListSearch(const vector<T>& Data, const T& searchValue, const int& mode) {
     vector<double>      execTimes;
     LinkedList<T>       linkedList;
     double              insertTime;
     double              mean;
     int                 index;
 
-    /* Initialize array */
-    auto start = chrono::high_resolution_clock::now();
-    for (const auto &each : Data) {
-        linkedList.insertToEnd(each);
-    }
-    auto end = chrono::high_resolution_clock::now();
-    auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-    insertTime = static_cast<double>(duration.count());
-
-    /* Measure execution times */
-    for (int i = 0; i < measureN; i++) {
-        start = chrono::high_resolution_clock::now();
-        bool retval = linkedList.findIndexLinear(searchValue, index);
-        end = chrono::high_resolution_clock::now();
-        duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-        if (retval) {
-            execTimes.push_back(static_cast<double>(duration.count()));
+    /* Display header, Initialize array and Measure execution times */
+    if (mode == 1) {
+        /* Display header */
+        cout << "SINGLY LINKED LIST LINEAR SEARCH:" << endl;
+        /* Initialize array */
+        auto start = chrono::high_resolution_clock::now();
+        for (const auto &each : Data) {
+            linkedList.insertToEnd(each);
         }
-    }
-
-    /* Sort and discard largest 1/3 */
-    sort(execTimes.begin(), execTimes.end());
-    execTimes.erase(execTimes.end() - static_cast<int>(measureN / 3), execTimes.end());
-
-    /* Calculate and display mean */
-    mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double)execTimes.size();
-    displayMeasuredTimes(insertTime, mean);
-
-    /*********/
-    /* Sort: */
-    /*********/
-    //linkedList.sort();
-    //cout << "Sort:" << endl;
-    //linkedList.printer();
-}
-
-template <typename T>
-void linkedListBinary(const vector<T>& Data, const T& searchValue) {
-    cout << "SINGLY LINKED LIST BINARY SEARCH:" << endl;
-
-    /******************/
-    /* Binary search: */
-    /******************/
-    vector<double>      execTimes;
-    LinkedList<T>       linkedList;
-    double              insertTime;
-    double              mean;
-    int                 index;
-
-    /* Initialize array */
-    auto start = chrono::high_resolution_clock::now();
-    for (const auto &each : Data) {
-        linkedList.insertOrdered(each);
-    }
-    auto end = chrono::high_resolution_clock::now();
-    auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-    insertTime = static_cast<double>(duration.count());
-
-    /* Measure execution times */
-    for (int i = 0; i < measureN; i++) {
-        start = chrono::high_resolution_clock::now();
-        bool retval = linkedList.findIndexBinary(searchValue, index);
-        end = chrono::high_resolution_clock::now();
-        duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-        if (retval) {
-            execTimes.push_back(static_cast<double>(duration.count()));
+        auto end = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+        insertTime = static_cast<double>(duration.count());
+        /* Measure execution times */
+        for (int i = 0; i < measureN; i++) {
+            start = chrono::high_resolution_clock::now();
+            bool retval = linkedList.findIndexLinear(searchValue, index);
+            end = chrono::high_resolution_clock::now();
+            duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+            if (retval) {
+                execTimes.push_back(static_cast<double>(duration.count()));
+            }
+        }
+    } else if (mode == 2) {
+        /* Display header */
+        cout << "SINGLY LINKED LIST BINARY SEARCH:" << endl;
+        /* Initialize array */
+        auto start = chrono::high_resolution_clock::now();
+        for (const auto &each: Data) {
+            linkedList.insertOrdered(each);
+        }
+        auto end = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+        insertTime = static_cast<double>(duration.count());
+        /* Measure execution times */
+        for (int i = 0; i < measureN; i++) {
+            start = chrono::high_resolution_clock::now();
+            bool retval = linkedList.findIndexBinary(searchValue, index);
+            end = chrono::high_resolution_clock::now();
+            duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+            if (retval) {
+                execTimes.push_back(static_cast<double>(duration.count()));
+            }
         }
     }
 
@@ -497,35 +386,55 @@ void linkedListBinary(const vector<T>& Data, const T& searchValue) {
 }
 
 template <typename T>
-void doubleLinkedListLinear(const vector<T>& Data, const T& searchValue) {
-    cout << "DOUBLY LINKED LIST LINEAR SEARCH:" << endl;
-
-    /******************/
-    /* Linear search: */
-    /******************/
+void doubleLinkedListSearch(const vector<T>& Data, const T& searchValue, const int& mode) {
     vector<double>          execTimes;
     DoubleLinkedList<T>     doubleLinkedList;
     double                  insertTime;
     double                  mean;
     int                     index;
 
-    /* Initialize array */
-    auto start = chrono::high_resolution_clock::now();
-    for (const auto &each: Data) {
-        doubleLinkedList.insertToEnd(each);
-    }
-    auto end = chrono::high_resolution_clock::now();
-    auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-    insertTime = static_cast<double>(duration.count());
-
-    /* Measure execution times */
-    for (int i = 0; i < measureN; i++) {
-        start = chrono::high_resolution_clock::now();
-        bool retval = doubleLinkedList.findIndexLinear(searchValue, index);
-        end = chrono::high_resolution_clock::now();
-        duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-        if (retval) {
-            execTimes.push_back(static_cast<double>(duration.count()));
+    /* Display header, Initialize array and Measure execution times */
+    if (mode == 1) {
+        /* Display header */
+        cout << "DOUBLY LINKED LIST LINEAR SEARCH:" << endl;
+        /* Initialize array */
+        auto start = chrono::high_resolution_clock::now();
+        for (const auto &each: Data) {
+            doubleLinkedList.insertToEnd(each);
+        }
+        auto end = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+        insertTime = static_cast<double>(duration.count());
+        /* Measure execution times */
+        for (int i = 0; i < measureN; i++) {
+            start = chrono::high_resolution_clock::now();
+            bool retval = doubleLinkedList.findIndexLinear(searchValue, index);
+            end = chrono::high_resolution_clock::now();
+            duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+            if (retval) {
+                execTimes.push_back(static_cast<double>(duration.count()));
+            }
+        }
+    } else if (mode == 2) {
+        /* Display header */
+        cout << "DOUBLY LINKED LIST BINARY SEARCH:" << endl;
+        /* Initialize array */
+        auto start = chrono::high_resolution_clock::now();
+        for (const auto &each: Data) {
+            doubleLinkedList.insertOrdered(each);
+        }
+        auto end = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+        insertTime = static_cast<double>(duration.count());
+        /* Measure execution times */
+        for (int i = 0; i < measureN; i++) {
+            start = chrono::high_resolution_clock::now();
+            bool retval = doubleLinkedList.findIndexBinary(searchValue, index);
+            end = chrono::high_resolution_clock::now();
+            duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+            if (retval) {
+                execTimes.push_back(static_cast<double>(duration.count()));
+            }
         }
     }
 
@@ -535,55 +444,6 @@ void doubleLinkedListLinear(const vector<T>& Data, const T& searchValue) {
 
     /* Calculate and display mean */
     mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double) execTimes.size();
-    displayMeasuredTimes(insertTime, mean);
-
-    /*********/
-    /* Sort: */
-    /*********/
-    //doubleLinkedList.sort();
-    //cout << "Sort:" << endl;
-    //doubleLinkedList.printer();
-}
-
-template <typename T>
-void doubleLinkedListBinary(const vector<T>& Data, const T& searchValue) {
-    cout << "DOUBLY LINKED LIST BINARY SEARCH:" << endl;
-
-    /******************/
-    /* Binary search: */
-    /******************/
-    vector<double>          execTimes;
-    DoubleLinkedList<T>     doubleLinkedList;
-    double                  insertTime;
-    double                  mean;
-    int                     index;
-
-    /* Initialize array */
-    auto start = chrono::high_resolution_clock::now();
-    for (const auto &each : Data) {
-        doubleLinkedList.insertOrdered(each);
-    }
-    auto end = chrono::high_resolution_clock::now();
-    auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-    insertTime = static_cast<double>(duration.count());
-
-    /* Measure execution times */
-    for (int i = 0; i < measureN; i++) {
-        start = chrono::high_resolution_clock::now();
-        bool retval = doubleLinkedList.findIndexBinary(searchValue, index);
-        end = chrono::high_resolution_clock::now();
-        duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-        if (retval) {
-            execTimes.push_back(static_cast<double>(duration.count()));
-        }
-    }
-
-    /* Sort and discard largest 1/3 */
-    sort(execTimes.begin(), execTimes.end());
-    execTimes.erase(execTimes.end() - static_cast<int>(measureN / 3), execTimes.end());
-
-    /* Calculate and display mean */
-    mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double)execTimes.size();
     displayMeasuredTimes(insertTime, mean);
 }
 

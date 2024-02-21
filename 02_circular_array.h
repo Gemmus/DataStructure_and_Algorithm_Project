@@ -1,7 +1,9 @@
 #include <iostream>
 #include <stdexcept>
 
-#define MAX 100000
+#ifndef MAX
+#define MAX     50000
+#endif
 
 using namespace std;
 

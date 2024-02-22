@@ -6,6 +6,7 @@
 #include <ctime>
 #include <numeric>
 #include <cmath>
+#include <string>
 #include <iomanip>
 
 #include "json.hpp"
@@ -23,6 +24,7 @@
 #define measureN        30
 
 using namespace std;
+using json = nlohmann::json;
                             /***************************/
                             /*       APPLICATION       */
                             /***************************/
@@ -61,10 +63,34 @@ int main() {
     /***********************/
     /*  SET DYNAMIC VALUE  */
     /***********************/
-    int testDataSize = 50000;   // MIN: 100 MAX: 50,000
-    int datatype = 3;  // 1: integer, 2: float, 3: double
+    int testDataSize = 1000;   // MIN: 100 MAX: 50,000
+    int datatype = 2;  // 1: integer, 2: float, 3: double
     int index = 24690;
 
+
+    /*********************/
+    /*       JSON        */
+    /*********************/
+#if 0
+    string jsonString = "{\"dataType\":2,\"arraySize\":333,\"searchIndex\":125}"; //Example json string
+    json j = json::parse(jsonString); // Parse the JSON string
+
+    if (j.find("dataType") != j.end() && j["dataType"].is_number_integer()) {
+        int dataType = j["dataType"];
+        std::cout << "Data Type: " << dataType << std::endl;
+    }
+
+    if (j.find("arraySize") != j.end() && j["arraySize"].is_number_integer()) {
+        int arraySize = j["arraySize"];
+        std::cout << "Array Size: " << arraySize << std::endl;
+    }
+
+    if (j.find("searchIndex") != j.end() && j["searchIndex"].is_number_integer()) {
+        int searchIndex = j["searchIndex"];
+        std::cout << "Search Index: " << searchIndex << std::endl;
+    }
+#endif
+    
     /*******************************/
     /*  GENERATE RANDOM TEST DATA  */
     /*******************************/
@@ -479,10 +505,11 @@ void customBinarySearch(const vector<T>& Data, const T& searchValue){
     cout << "CUSTOM BINARY TREE SEARCH:" << endl;
     /* Initialize array */
     auto start = chrono::high_resolution_clock::now();
-    for (const auto &each: Data) {
+    for (const auto &each : Data) {
         binaryTree.insert(each);
     }
-    auto end = chrono::high_resolution_clock::now();auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+    auto end = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
     insertTime = static_cast<double>(duration.count());
     /* Measure execution times */
     for (int i = 0; i < measureN; i++) {
@@ -515,10 +542,11 @@ void STLBinarySearch(const vector<T>& Data, const T& searchValue) {
     cout << "STL BINARY TREE SEARCH:" << endl;
     /* Initialize array */
     auto start = chrono::high_resolution_clock::now();
-    for (const auto &each: Data) {
+    for (const auto &each : Data) {
         binaryTree.insert(each);
     }
-    auto end = chrono::high_resolution_clock::now();auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+    auto end = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
     insertTime = static_cast<double>(duration.count());
     /* Measure execution times */
     for (int i = 0; i < measureN; i++) {

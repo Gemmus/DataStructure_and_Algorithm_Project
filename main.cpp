@@ -67,7 +67,6 @@ int main() {
     int datatype = 2;  // 1: integer, 2: float, 3: double
     int index = 24690;
 
-
     /*********************/
     /*       JSON        */
     /*********************/
@@ -90,7 +89,7 @@ int main() {
         std::cout << "Search Index: " << searchIndex << std::endl;
     }
 #endif
-    
+
     /*******************************/
     /*  GENERATE RANDOM TEST DATA  */
     /*******************************/

@@ -1,17 +1,6 @@
 # ninja log v5
-3	2017	7302885833234839	CMakeFiles/DataStructAlg.dir/main.cpp.obj	1f094cffed874da9
-2017	2148	7302885834554929	DataStructAlg.exe	be8ccb89fda4d63a
-2	162	7302925230677728	build.ninja	4b0af5a40e310fdd
-2	179	7302925230677728	build.ninja	4b0af5a40e310fdd
-3	1519	7302925246767925	CMakeFiles/DataStructAlg.dir/main.cpp.obj	1f094cffed874da9
-1520	1667	7302925248238804	DataStructAlg.exe	be8ccb89fda4d63a
-3	2014	7302937538297893	CMakeFiles/DataStructAlg.dir/main.cpp.obj	1f094cffed874da9
-2015	2145	7302937539602664	DataStructAlg.exe	be8ccb89fda4d63a
-2	1509	7302939605339911	CMakeFiles/DataStructAlg.dir/main.cpp.obj	1f094cffed874da9
-1511	1641	7302939606649901	DataStructAlg.exe	be8ccb89fda4d63a
-2	1507	7302940115138320	CMakeFiles/DataStructAlg.dir/main.cpp.obj	1f094cffed874da9
-1507	1638	7302940116418312	DataStructAlg.exe	be8ccb89fda4d63a
-2	1555	7302943399062717	CMakeFiles/DataStructAlg.dir/main.cpp.obj	1f094cffed874da9
-1556	1687	7302943400362709	DataStructAlg.exe	be8ccb89fda4d63a
-2	1514	7302943490756013	CMakeFiles/DataStructAlg.dir/main.cpp.obj	1f094cffed874da9
-1515	1646	7302943492056004	DataStructAlg.exe	be8ccb89fda4d63a
+2	1795	7302949910334638	CMakeFiles/DataStructAlg.dir/main.cpp.obj	1f094cffed874da9
+3	178	7302954105285256	DataStructAlg.exe	6d100a926bf1946a
+1	150	7302954505204276	build.ninja	4b0af5a40e310fdd
+0	140	7302954505204276	build.ninja	4b0af5a40e310fdd
+2	176	7302954507474472	DataStructAlg.exe	be8ccb89fda4d63a

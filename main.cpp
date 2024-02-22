@@ -61,8 +61,8 @@ int main() {
     /***********************/
     /*  SET DYNAMIC VALUE  */
     /***********************/
-    int testDataSize = 1000;   // MIN: 100 MAX: 50,000
-    int datatype = 2;  // 1: integer, 2: float, 3: double
+    int testDataSize = 50000;   // MIN: 100 MAX: 50,000
+    int datatype = 3;  // 1: integer, 2: float, 3: double
     int index = 24690;
 
     /*******************************/
@@ -141,6 +141,8 @@ int main() {
             /* CUSTOM BINARY SEARCH TREE */
             customBinarySearch(IntRandData, searchedValue);
 
+            /* STL BINARY SEARCH TREE */
+            STLBinarySearch(IntRandData, searchedValue);
 
             /* HASH TABLE */
 
@@ -170,7 +172,12 @@ int main() {
             /* CUSTOM BINARY SEARCH TREE */
             customBinarySearch(FloatRandData, floatSearchValue);
 
+            /* STL BINARY SEARCH TREE */
+            STLBinarySearch(FloatRandData, floatSearchValue);
+
             /* HASH TABLE */
+
+            break;
 
         case 3:
             cout << "---------------------------------------------------------------" << endl;
@@ -196,9 +203,12 @@ int main() {
             /* CUSTOM BINARY SEARCH TREE */
             customBinarySearch(DoubleRandData, doubleSearchValue);
 
+            /* STL BINARY SEARCH TREE */
+            STLBinarySearch(DoubleRandData, doubleSearchValue);
 
             /* HASH TABLE */
 
+            break;
 
         default:
             break;
@@ -495,8 +505,39 @@ void customBinarySearch(const vector<T>& Data, const T& searchValue){
 }
 
 template <typename T>
-void STLBinarySearch(const vector<T>&, const T&) {
+void STLBinarySearch(const vector<T>& Data, const T& searchValue) {
+    vector<double>          execTimes;
+    STLBinaryTree<T>        binaryTree;
+    double                  insertTime;
+    double                  mean;
 
+    /* Display header */
+    cout << "STL BINARY TREE SEARCH:" << endl;
+    /* Initialize array */
+    auto start = chrono::high_resolution_clock::now();
+    for (const auto &each: Data) {
+        binaryTree.insert(each);
+    }
+    auto end = chrono::high_resolution_clock::now();auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+    insertTime = static_cast<double>(duration.count());
+    /* Measure execution times */
+    for (int i = 0; i < measureN; i++) {
+        start = chrono::high_resolution_clock::now();
+        bool retval = binaryTree.find(searchValue);
+        end = chrono::high_resolution_clock::now();
+        duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+        if (retval) {
+            execTimes.push_back(static_cast<double>(duration.count()));
+        }
+    }
+
+    /* Sort and discard largest 1/3 */
+    sort(execTimes.begin(), execTimes.end());
+    execTimes.erase(execTimes.end() - static_cast<int>(measureN / 3), execTimes.end());
+
+    /* Calculate and display mean */
+    mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double) execTimes.size();
+    displayMeasuredTimes(insertTime, mean);
 }
 
 template <typename T>

@@ -1,8 +1,31 @@
-//
-// Created by Gemma on 19/02/2024.
-//
+#include <set>
 
-#ifndef DATASTRUCTALG_06_STL_BINARY_TREE_H
-#define DATASTRUCTALG_06_STL_BINARY_TREE_H
+using namespace std;
 
-#endif //DATASTRUCTALG_06_STL_BINARY_TREE_H
+/*********************************************/
+/*     class STLBinaryTree interface      */
+/*********************************************/
+template <class T>
+class STLBinaryTree {
+public:
+    STLBinaryTree() = default;
+    ~STLBinaryTree() = default;
+    void insert(T item);
+    bool find(T item);
+
+private:
+    set<T> tree;
+};
+
+/*********************************************/
+/*   class CustomBinaryTree implementation   */
+/*********************************************/
+template <class T>
+void STLBinaryTree<T>::insert(T item) {
+    tree.insert(item);
+}
+
+template <class T>
+bool STLBinaryTree<T>::find(T item) {
+    return tree.find(item) != tree.end();
+}

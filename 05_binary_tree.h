@@ -1,8 +1,0 @@
-//
-// Created by Gemma on 19/02/2024.
-//
-
-#ifndef DATASTRUCTALG_05_BINARY_TREE_H
-#define DATASTRUCTALG_05_BINARY_TREE_H
-
-#endif //DATASTRUCTALG_05_BINARY_TREE_H

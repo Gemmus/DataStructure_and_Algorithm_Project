@@ -13,8 +13,9 @@
 #include "02_circular_array.h"
 #include "03_linked_list.h"
 #include "04_double_linked_list.h"
-#include "05_binary_tree.h"
-#include "06_hash_table.h"
+#include "05_custom_binary_tree.h"
+#include "06_STL_binary_tree.h"
+#include "07_hash_table.h"
 #include "random_generator.h"
 
 #define RANDOM_MIN      0
@@ -29,6 +30,7 @@ using namespace std;
 /***************************/
 /*  FUNCTION DECLARATIONS  */
 /***************************/
+/* For searching elements */
 template <typename T>
 void arraySearch(const vector<T>&, const T&, const int&);
 template <typename T>
@@ -38,8 +40,14 @@ void linkedListSearch(const vector<T>&, const T&, const int&);
 template <typename T>
 void doubleLinkedListSearch(const vector<T>&, const T&, const int&);
 template <typename T>
+void customBinarySearch(const vector<T>&, const T&);
+template <typename T>
+void STLBinarySearch(const vector<T>&, const T&);
+/* Others */
+template <typename T>
 void displayVector(const vector<T>&);
 void displayMeasuredTimes(const double&, const double&);
+
 
 /***************************/
 /*          MAIN           */
@@ -53,8 +61,8 @@ int main() {
     /***********************/
     /*  SET DYNAMIC VALUE  */
     /***********************/
-    int testDataSize = 50000;
-    int datatype = 3;  // 1: integer, 2: float, 3: double
+    int testDataSize = 1000;   // MIN: 100 MAX: 50,000
+    int datatype = 2;  // 1: integer, 2: float, 3: double
     int index = 24690;
 
     /*******************************/
@@ -130,7 +138,8 @@ int main() {
             doubleLinkedListSearch(IntRandData, searchedValue, 1);
             doubleLinkedListSearch(IntRandData, searchedValue, 2);
 
-            /* BINARY SEARCH TREE */
+            /* CUSTOM BINARY SEARCH TREE */
+            customBinarySearch(IntRandData, searchedValue);
 
 
             /* HASH TABLE */
@@ -158,7 +167,8 @@ int main() {
             doubleLinkedListSearch(FloatRandData, floatSearchValue, 1);
             doubleLinkedListSearch(FloatRandData, floatSearchValue, 2);
 
-            /* BINARY SEARCH TREE */
+            /* CUSTOM BINARY SEARCH TREE */
+            customBinarySearch(FloatRandData, floatSearchValue);
 
             /* HASH TABLE */
 
@@ -183,7 +193,8 @@ int main() {
             doubleLinkedListSearch(DoubleRandData, doubleSearchValue, 1);
             doubleLinkedListSearch(DoubleRandData, doubleSearchValue, 2);
 
-            /* BINARY SEARCH TREE */
+            /* CUSTOM BINARY SEARCH TREE */
+            customBinarySearch(DoubleRandData, doubleSearchValue);
 
 
             /* HASH TABLE */
@@ -445,6 +456,47 @@ void doubleLinkedListSearch(const vector<T>& Data, const T& searchValue, const i
     /* Calculate and display mean */
     mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double) execTimes.size();
     displayMeasuredTimes(insertTime, mean);
+}
+
+template <typename T>
+void customBinarySearch(const vector<T>& Data, const T& searchValue){
+    vector<double>          execTimes;
+    CustomBinaryTree<T>     binaryTree;
+    double                  insertTime;
+    double                  mean;
+
+    /* Display header */
+    cout << "CUSTOM BINARY TREE SEARCH:" << endl;
+    /* Initialize array */
+    auto start = chrono::high_resolution_clock::now();
+    for (const auto &each: Data) {
+        binaryTree.insert(each);
+    }
+    auto end = chrono::high_resolution_clock::now();auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+    insertTime = static_cast<double>(duration.count());
+    /* Measure execution times */
+    for (int i = 0; i < measureN; i++) {
+        start = chrono::high_resolution_clock::now();
+        bool retval = binaryTree.find(searchValue);
+        end = chrono::high_resolution_clock::now();
+        duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+        if (retval) {
+            execTimes.push_back(static_cast<double>(duration.count()));
+        }
+    }
+
+    /* Sort and discard largest 1/3 */
+    sort(execTimes.begin(), execTimes.end());
+    execTimes.erase(execTimes.end() - static_cast<int>(measureN / 3), execTimes.end());
+
+    /* Calculate and display mean */
+    mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double) execTimes.size();
+    displayMeasuredTimes(insertTime, mean);
+}
+
+template <typename T>
+void STLBinarySearch(const vector<T>&, const T&) {
+
 }
 
 template <typename T>

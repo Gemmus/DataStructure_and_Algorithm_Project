@@ -1,12 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <chrono>
-#include <iterator>
 #include <algorithm>
 #include <ctime>
 #include <numeric>
-#include <cmath>
-#include <string>
 #include <iomanip>
 
 #include "json.hpp"
@@ -16,7 +13,6 @@
 #include "04_double_linked_list.h"
 #include "05_custom_binary_tree.h"
 #include "06_STL_binary_tree.h"
-#include "07_hash_table.h"
 #include "random_generator.h"
 
 #define RANDOM_MIN      0
@@ -25,31 +21,55 @@
 
 using namespace std;
 using json = nlohmann::json;
+
                             /***************************/
                             /*       APPLICATION       */
                             /***************************/
+
+/*********************************************/
+/*  STRUCT TO STORE EACH MEASUREMENT VALUES  */
+/*********************************************/
+ typedef struct time_data {
+     double insertionTime;
+     double mean;
+ } timeData;
+
+/****************************/
+/*    MEASUREMENT VALUES    */
+/****************************/
+static timeData         arrayLin;
+static timeData         arrayBin;
+static timeData          circLin;
+static timeData          circBin;
+static timeData        singlyLin;
+static timeData        singlyBin;
+static timeData        doublyLin;
+static timeData        doublyBin;
+static timeData        customBin;
+static timeData           STLBin;
 
 /***************************/
 /*  FUNCTION DECLARATIONS  */
 /***************************/
 /* For searching elements */
 template <typename T>
-void arraySearch(const vector<T>&, const T&, const int&);
+void arraySearch(const vector<T>& Data, const T& searchValue, const int& mode, timeData& dataStruct);
 template <typename T>
-void circArraySearch(const vector<T>&, const T&, const int&);
+void circArraySearch(const vector<T>& Data, const T& searchValue, const int& mode, timeData& dataStruct);
 template <typename T>
-void linkedListSearch(const vector<T>&, const T&, const int&);
+void linkedListSearch(const vector<T>& Data, const T& searchValue, const int& mode, timeData& dataStruct);
 template <typename T>
-void doubleLinkedListSearch(const vector<T>&, const T&, const int&);
+void doubleLinkedListSearch(const vector<T>& Data, const T& searchValue, const int& mode, timeData& dataStruct);
 template <typename T>
-void customBinarySearch(const vector<T>&, const T&);
+void customBinarySearch(const vector<T>& Data, const T& searchValue, timeData& dataStruct);
 template <typename T>
-void STLBinarySearch(const vector<T>&, const T&);
+void STLBinarySearch(const vector<T>& Data, const T& searchValue, timeData& dataStruct);
 /* Others */
+void extractJSON(const string& jsonData, int& dataType, int& arraySize, int& searchIndex);
 template <typename T>
-void displayVector(const vector<T>&);
-void displayMeasuredTimes(const double&, const double&);
-
+void displayVector(const vector<T>& Vector);
+void displayMeasuredTimes(const timeData& dataStruct);
+json createJSON(const int& dataType, const int& arraySize, const int& index);
 
 /***************************/
 /*          MAIN           */
@@ -61,33 +81,20 @@ int main() {
     srand(time(nullptr));
 
     /***********************/
-    /*  SET DYNAMIC VALUE  */
+    /*      VARIABLES      */
     /***********************/
-    int testDataSize = 1000;   // MIN: 100 MAX: 50,000
-    int datatype = 2;  // 1: integer, 2: float, 3: double
-    int index = 24690;
+    int datatype      =     2;      // 1: integer, 2: float, 3: double
+    int testDataSize  =  1000;      // MIN: 100 MAX: 50,000
+    int index         =   246;
 
-    /*********************/
-    /*       JSON        */
-    /*********************/
-#if 0
+    /**********************/
+    /*    EXTRACT JSON    */
+    /**********************/
+#if 1
     string jsonString = "{\"dataType\":2,\"arraySize\":333,\"searchIndex\":125}"; //Example json string
-    json j = json::parse(jsonString); // Parse the JSON string
-
-    if (j.find("dataType") != j.end() && j["dataType"].is_number_integer()) {
-        int dataType = j["dataType"];
-        std::cout << "Data Type: " << dataType << std::endl;
-    }
-
-    if (j.find("arraySize") != j.end() && j["arraySize"].is_number_integer()) {
-        int arraySize = j["arraySize"];
-        std::cout << "Array Size: " << arraySize << std::endl;
-    }
-
-    if (j.find("searchIndex") != j.end() && j["searchIndex"].is_number_integer()) {
-        int searchIndex = j["searchIndex"];
-        std::cout << "Search Index: " << searchIndex << std::endl;
-    }
+    int dataType, arraySize, searchIndex;
+    extractJSON(jsonString, dataType, arraySize, searchIndex);
+    cout << "dataType: " << dataType << " arraySize: " << arraySize << " searchIndex: " << searchIndex << endl;
 #endif
 
     /*******************************/
@@ -148,28 +155,26 @@ int main() {
             cout << "---------------------------------------------------------------" << endl;
 
             /*       ARRAY       */
-            arraySearch(IntRandData, searchedValue, 1);
-            arraySearch(IntRandData, searchedValue, 2);
+            arraySearch(IntRandData, searchedValue, 1, arrayLin);
+            arraySearch(IntRandData, searchedValue, 2, arrayBin);
 
             /*  CIRCULAR ARRAY  */
-            circArraySearch(IntRandData, searchedValue, 1);
-            circArraySearch(IntRandData, searchedValue, 2);
+            circArraySearch(IntRandData, searchedValue, 1, circLin);
+            circArraySearch(IntRandData, searchedValue, 2, circBin);
 
             /*    LINKED LIST    */
-            linkedListSearch(IntRandData, searchedValue, 1);
-            linkedListSearch(IntRandData, searchedValue, 2);
+            linkedListSearch(IntRandData, searchedValue, 1, singlyLin);
+            linkedListSearch(IntRandData, searchedValue, 2, singlyBin);
 
             /* DOUBLE LINKED LIST */
-            doubleLinkedListSearch(IntRandData, searchedValue, 1);
-            doubleLinkedListSearch(IntRandData, searchedValue, 2);
+            doubleLinkedListSearch(IntRandData, searchedValue, 1, doublyLin);
+            doubleLinkedListSearch(IntRandData, searchedValue, 2, doublyBin);
 
             /* CUSTOM BINARY SEARCH TREE */
-            customBinarySearch(IntRandData, searchedValue);
+            customBinarySearch(IntRandData, searchedValue, customBin);
 
             /* STL BINARY SEARCH TREE */
-            STLBinarySearch(IntRandData, searchedValue);
-
-            /* HASH TABLE */
+            STLBinarySearch(IntRandData, searchedValue, STLBin);
 
             break;
 
@@ -179,28 +184,26 @@ int main() {
             cout << "---------------------------------------------------------------" << endl;
 
             /*       ARRAY       */
-            arraySearch(FloatRandData, floatSearchValue, 1);
-            arraySearch(FloatRandData, floatSearchValue, 2);
+            arraySearch(FloatRandData, floatSearchValue, 1, arrayLin);
+            arraySearch(FloatRandData, floatSearchValue, 2, arrayBin);
 
             /*  CIRCULAR ARRAY  */
-            circArraySearch(FloatRandData, floatSearchValue, 1);
-            circArraySearch(FloatRandData, floatSearchValue, 2);
+            circArraySearch(FloatRandData, floatSearchValue, 1, circLin);
+            circArraySearch(FloatRandData, floatSearchValue, 2, circBin);
 
             /*    LINKED LIST    */
-            linkedListSearch(FloatRandData, floatSearchValue, 1);
-            linkedListSearch(FloatRandData, floatSearchValue, 2);
+            linkedListSearch(FloatRandData, floatSearchValue, 1, singlyLin);
+            linkedListSearch(FloatRandData, floatSearchValue, 2, singlyBin);
 
             /* DOUBLE LINKED LIST */
-            doubleLinkedListSearch(FloatRandData, floatSearchValue, 1);
-            doubleLinkedListSearch(FloatRandData, floatSearchValue, 2);
+            doubleLinkedListSearch(FloatRandData, floatSearchValue, 1, doublyLin);
+            doubleLinkedListSearch(FloatRandData, floatSearchValue, 2, doublyBin);
 
             /* CUSTOM BINARY SEARCH TREE */
-            customBinarySearch(FloatRandData, floatSearchValue);
+            customBinarySearch(FloatRandData, floatSearchValue, customBin);
 
             /* STL BINARY SEARCH TREE */
-            STLBinarySearch(FloatRandData, floatSearchValue);
-
-            /* HASH TABLE */
+            STLBinarySearch(FloatRandData, floatSearchValue, STLBin);
 
             break;
 
@@ -210,34 +213,38 @@ int main() {
             cout << "---------------------------------------------------------------" << endl;
 
             /*       ARRAY       */
-            arraySearch(DoubleRandData, doubleSearchValue, 1);
-            arraySearch(DoubleRandData, doubleSearchValue, 2);
+            arraySearch(DoubleRandData, doubleSearchValue, 1, arrayLin);
+            arraySearch(DoubleRandData, doubleSearchValue, 2, arrayBin);
 
             /*  CIRCULAR ARRAY  */
-            circArraySearch(DoubleRandData, doubleSearchValue, 1);
-            circArraySearch(DoubleRandData, doubleSearchValue, 2);
+            circArraySearch(DoubleRandData, doubleSearchValue, 1, circLin);
+            circArraySearch(DoubleRandData, doubleSearchValue, 2, circBin);
 
             /*    LINKED LIST    */
-            linkedListSearch(DoubleRandData, doubleSearchValue, 1);
-            linkedListSearch(DoubleRandData, doubleSearchValue, 2);
+            linkedListSearch(DoubleRandData, doubleSearchValue, 1, singlyLin);
+            linkedListSearch(DoubleRandData, doubleSearchValue, 2, singlyBin);
 
             /* DOUBLE LINKED LIST */
-            doubleLinkedListSearch(DoubleRandData, doubleSearchValue, 1);
-            doubleLinkedListSearch(DoubleRandData, doubleSearchValue, 2);
+            doubleLinkedListSearch(DoubleRandData, doubleSearchValue, 1, doublyLin);
+            doubleLinkedListSearch(DoubleRandData, doubleSearchValue, 2, doublyBin);
 
             /* CUSTOM BINARY SEARCH TREE */
-            customBinarySearch(DoubleRandData, doubleSearchValue);
+            customBinarySearch(DoubleRandData, doubleSearchValue, customBin);
 
             /* STL BINARY SEARCH TREE */
-            STLBinarySearch(DoubleRandData, doubleSearchValue);
-
-            /* HASH TABLE */
+            STLBinarySearch(DoubleRandData, doubleSearchValue, STLBin);
 
             break;
 
         default:
             break;
     }
+
+    /******************************/
+    /*      CREATE JSON DATA      */
+    /******************************/
+    json jsonDataOUT = createJSON(datatype, testDataSize, index);
+    cout << jsonDataOUT << endl;
 
     return 0;
 }
@@ -246,11 +253,9 @@ int main() {
 /*  FUNCTION IMPLEMENTATIONS  */
 /******************************/
 template <typename T>
-void arraySearch(const vector<T>& Data, const T& searchValue, const int& mode) {
+void arraySearch(const vector<T>& Data, const T& searchValue, const int& mode, timeData& dataStruct) {
     vector<double>  execTimes;
     List<T>         array;
-    double          insertTime;
-    double          mean;
     int             index;
 
     /* Display header, Initialize array and Measure execution times */
@@ -264,7 +269,7 @@ void arraySearch(const vector<T>& Data, const T& searchValue, const int& mode) {
         }
         auto end = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-        insertTime = static_cast<double>(duration.count());
+        dataStruct.insertionTime = static_cast<double>(duration.count());
         /* Measure execution times */
         for (int i = 0; i < measureN; i++) {
             start = chrono::high_resolution_clock::now();
@@ -285,7 +290,7 @@ void arraySearch(const vector<T>& Data, const T& searchValue, const int& mode) {
         }
         auto end = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-        insertTime = static_cast<double>(duration.count());
+        dataStruct.insertionTime = static_cast<double>(duration.count());
         /* Measure execution times */
         for (int i = 0; i < measureN; i++) {
             start = chrono::high_resolution_clock::now();
@@ -303,16 +308,14 @@ void arraySearch(const vector<T>& Data, const T& searchValue, const int& mode) {
     execTimes.erase(execTimes.end() - static_cast<int>(measureN / 3), execTimes.end());
 
     /* Calculate and display mean */
-    mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double)execTimes.size();
-    displayMeasuredTimes(insertTime, mean);
+    dataStruct.mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double)execTimes.size();
+    displayMeasuredTimes(dataStruct);
 }
 
 template <typename T>
-void circArraySearch(const vector<T>& Data, const T& searchValue, const int& mode) {
+void circArraySearch(const vector<T>& Data, const T& searchValue, const int& mode, timeData& dataStruct) {
     vector<double>      execTimes;
     CircList<T>         circArray;
-    double              insertTime;
-    double              mean;
     int                 index;
 
     /* Display header, Initialize array and Measure execution times */
@@ -326,7 +329,7 @@ void circArraySearch(const vector<T>& Data, const T& searchValue, const int& mod
         }
         auto end = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-        insertTime = static_cast<double>(duration.count());
+        dataStruct.insertionTime = static_cast<double>(duration.count());
         /* Measure execution times */
         for (int i = 0; i < measureN; i++) {
             start = chrono::high_resolution_clock::now();
@@ -347,7 +350,7 @@ void circArraySearch(const vector<T>& Data, const T& searchValue, const int& mod
         }
         auto end = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-        insertTime = static_cast<double>(duration.count());
+        dataStruct.insertionTime = static_cast<double>(duration.count());
         /* Measure execution times */
         for (int i = 0; i < measureN; i++) {
             start = chrono::high_resolution_clock::now();
@@ -365,16 +368,14 @@ void circArraySearch(const vector<T>& Data, const T& searchValue, const int& mod
     execTimes.erase(execTimes.end() - static_cast<int>(measureN / 3), execTimes.end());
 
     /* Calculate and display mean */
-    mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double)execTimes.size();
-    displayMeasuredTimes(insertTime, mean);
+    dataStruct.mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double)execTimes.size();
+    displayMeasuredTimes(dataStruct);
 }
 
 template <typename T>
-void linkedListSearch(const vector<T>& Data, const T& searchValue, const int& mode) {
+void linkedListSearch(const vector<T>& Data, const T& searchValue, const int& mode, timeData& dataStruct) {
     vector<double>      execTimes;
     LinkedList<T>       linkedList;
-    double              insertTime;
-    double              mean;
     int                 index;
 
     /* Display header, Initialize array and Measure execution times */
@@ -388,7 +389,7 @@ void linkedListSearch(const vector<T>& Data, const T& searchValue, const int& mo
         }
         auto end = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-        insertTime = static_cast<double>(duration.count());
+        dataStruct.insertionTime = static_cast<double>(duration.count());
         /* Measure execution times */
         for (int i = 0; i < measureN; i++) {
             start = chrono::high_resolution_clock::now();
@@ -409,7 +410,7 @@ void linkedListSearch(const vector<T>& Data, const T& searchValue, const int& mo
         }
         auto end = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-        insertTime = static_cast<double>(duration.count());
+        dataStruct.insertionTime = static_cast<double>(duration.count());
         /* Measure execution times */
         for (int i = 0; i < measureN; i++) {
             start = chrono::high_resolution_clock::now();
@@ -427,16 +428,14 @@ void linkedListSearch(const vector<T>& Data, const T& searchValue, const int& mo
     execTimes.erase(execTimes.end() - static_cast<int>(measureN / 3), execTimes.end());
 
     /* Calculate and display mean */
-    mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double)execTimes.size();
-    displayMeasuredTimes(insertTime, mean);
+    dataStruct.mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double)execTimes.size();
+    displayMeasuredTimes(dataStruct);
 }
 
 template <typename T>
-void doubleLinkedListSearch(const vector<T>& Data, const T& searchValue, const int& mode) {
+void doubleLinkedListSearch(const vector<T>& Data, const T& searchValue, const int& mode, timeData& dataStruct) {
     vector<double>          execTimes;
     DoubleLinkedList<T>     doubleLinkedList;
-    double                  insertTime;
-    double                  mean;
     int                     index;
 
     /* Display header, Initialize array and Measure execution times */
@@ -450,7 +449,7 @@ void doubleLinkedListSearch(const vector<T>& Data, const T& searchValue, const i
         }
         auto end = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-        insertTime = static_cast<double>(duration.count());
+        dataStruct.insertionTime = static_cast<double>(duration.count());
         /* Measure execution times */
         for (int i = 0; i < measureN; i++) {
             start = chrono::high_resolution_clock::now();
@@ -471,7 +470,7 @@ void doubleLinkedListSearch(const vector<T>& Data, const T& searchValue, const i
         }
         auto end = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-        insertTime = static_cast<double>(duration.count());
+        dataStruct.insertionTime = static_cast<double>(duration.count());
         /* Measure execution times */
         for (int i = 0; i < measureN; i++) {
             start = chrono::high_resolution_clock::now();
@@ -489,16 +488,14 @@ void doubleLinkedListSearch(const vector<T>& Data, const T& searchValue, const i
     execTimes.erase(execTimes.end() - static_cast<int>(measureN / 3), execTimes.end());
 
     /* Calculate and display mean */
-    mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double) execTimes.size();
-    displayMeasuredTimes(insertTime, mean);
+    dataStruct.mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double) execTimes.size();
+    displayMeasuredTimes(dataStruct);
 }
 
 template <typename T>
-void customBinarySearch(const vector<T>& Data, const T& searchValue){
+void customBinarySearch(const vector<T>& Data, const T& searchValue, timeData& dataStruct){
     vector<double>          execTimes;
     CustomBinaryTree<T>     binaryTree;
-    double                  insertTime;
-    double                  mean;
 
     /* Display header */
     cout << "CUSTOM BINARY TREE SEARCH:" << endl;
@@ -509,7 +506,7 @@ void customBinarySearch(const vector<T>& Data, const T& searchValue){
     }
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-    insertTime = static_cast<double>(duration.count());
+    dataStruct.insertionTime = static_cast<double>(duration.count());
     /* Measure execution times */
     for (int i = 0; i < measureN; i++) {
         start = chrono::high_resolution_clock::now();
@@ -526,16 +523,14 @@ void customBinarySearch(const vector<T>& Data, const T& searchValue){
     execTimes.erase(execTimes.end() - static_cast<int>(measureN / 3), execTimes.end());
 
     /* Calculate and display mean */
-    mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double) execTimes.size();
-    displayMeasuredTimes(insertTime, mean);
+    dataStruct.mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double) execTimes.size();
+    displayMeasuredTimes(dataStruct);
 }
 
 template <typename T>
-void STLBinarySearch(const vector<T>& Data, const T& searchValue) {
+void STLBinarySearch(const vector<T>& Data, const T& searchValue, timeData& dataStruct) {
     vector<double>          execTimes;
     STLBinaryTree<T>        binaryTree;
-    double                  insertTime;
-    double                  mean;
 
     /* Display header */
     cout << "STL BINARY TREE SEARCH:" << endl;
@@ -546,7 +541,7 @@ void STLBinarySearch(const vector<T>& Data, const T& searchValue) {
     }
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
-    insertTime = static_cast<double>(duration.count());
+    dataStruct.insertionTime = static_cast<double>(duration.count());
     /* Measure execution times */
     for (int i = 0; i < measureN; i++) {
         start = chrono::high_resolution_clock::now();
@@ -563,8 +558,24 @@ void STLBinarySearch(const vector<T>& Data, const T& searchValue) {
     execTimes.erase(execTimes.end() - static_cast<int>(measureN / 3), execTimes.end());
 
     /* Calculate and display mean */
-    mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double) execTimes.size();
-    displayMeasuredTimes(insertTime, mean);
+    dataStruct.mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double) execTimes.size();
+    displayMeasuredTimes(dataStruct);
+}
+
+void extractJSON(const string& jsonData, int& dataType, int& arraySize, int& searchIndex) {
+    json j = json::parse(jsonData); // Parse the JSON string
+
+    if (j.find("dataType") != j.end() && j["dataType"].is_number_integer()) {
+        dataType = j["dataType"];
+    }
+
+    if (j.find("arraySize") != j.end() && j["arraySize"].is_number_integer()) {
+        arraySize = j["arraySize"];
+    }
+
+    if (j.find("searchIndex") != j.end() && j["searchIndex"].is_number_integer()) {
+        searchIndex = j["searchIndex"];
+    }
 }
 
 template <typename T>
@@ -578,9 +589,46 @@ void displayVector(const vector<T>& Vector) {
     cout << endl;
 }
 
-void displayMeasuredTimes(const double& insertTime, const double& mean) {
-    cout << "Insertion time: " << fixed << setprecision(1) << insertTime << " ns" << endl;
-    cout << "Average exec time: " << fixed << setprecision(1) << mean << " ns" << endl;
-    cout << "Overall time: " << fixed << setprecision(1) << insertTime + mean << " ns" << endl;
+void displayMeasuredTimes(const timeData& dataStruct) {
+    cout << "Insertion time: " << fixed << setprecision(1) << dataStruct.insertionTime << " ns" << endl;
+    cout << "Average exec time: " << fixed << setprecision(1) << dataStruct.mean << " ns" << endl;
+    cout << "Overall time: " << fixed << setprecision(1) << dataStruct.insertionTime + dataStruct.mean << " ns" << endl;
     cout << "---------------------------------------------------------------" << endl;
+}
+
+json createJSON(const int& dataType, const int& arraySize, const int& index) {
+    json jsonData;
+
+    // Adding received parameters
+    jsonData["data"]["params"] = {
+            {"datatype", dataType},
+            {"arraySize", arraySize},
+            {"index", index}
+    };
+
+    // Adding measurements
+    jsonData["data"]["measurements"] = {
+            {"arrayLin_ins", arrayLin.insertionTime},
+            {"arrayLin_mean", arrayLin.mean},
+            {"arrayBin_ins", arrayBin.insertionTime},
+            {"arrayBin_mean", arrayBin.mean},
+            {"circLin_ins", circLin.insertionTime},
+            {"circLin_mean", circLin.mean},
+            {"circBin_ins", circBin.insertionTime},
+            {"circBin_mean", circBin.mean},
+            {"singlyLin_ins", singlyLin.insertionTime},
+            {"singlyLin_mean", singlyLin.mean},
+            {"singlyBin_ins", singlyBin.insertionTime},
+            {"singlyBin_mean", singlyBin.mean},
+            {"doublyLin_ins", doublyLin.insertionTime},
+            {"doublyLin_mean", doublyLin.mean},
+            {"doublyBin_ins", doublyBin.insertionTime},
+            {"doublyBin_mean", doublyBin.mean},
+            {"customBin_ins", customBin.insertionTime},
+            {"customBin_mean", customBin.mean},
+            {"STLBin_ins", STLBin.insertionTime},
+            {"STLBin_mean", STLBin.mean}
+    };
+
+    return jsonData;
 }

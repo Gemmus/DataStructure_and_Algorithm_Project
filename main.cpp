@@ -607,7 +607,7 @@ json createJSON(const int& dataType, const int& arraySize, const int& index) {
     };
 
     // Adding measurements
-    jsonData["data"]["measurements"] = {
+    jsonData["data"]["values"] = {
             {"arrayLin_ins", arrayLin.insertionTime},
             {"arrayLin_mean", arrayLin.mean},
             {"arrayBin_ins", arrayBin.insertionTime},

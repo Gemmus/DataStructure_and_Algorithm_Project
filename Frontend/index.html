@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="./index.css" rel="stylesheet" type="text/css">
+    <script src="./main.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link rel="icon" href="Images/icon.jpg" type="image/icon">
+    <title>Insertion and Search Measurer</title>
+</head>
+<body>
+<section class="header">
+    <nav>
+        <img src="Images/icon.jpg" alt="logo">
+        <p><pre>Data Structure and Algorithm Project with Raspberry Pi 4</pre>
+    </nav>
+    <div class="text-box">
+        <h1>Insertion, Linear and Binary Search Measurer</h1>
+        <br>
+    </div>
+</section>
+<section class="selection">
+    <form id="option-selection">
+        <label><b>Datatype:</b></label><br>
+        <input type="radio" name="datatype" id="dataType1" value="1" checked>
+        <label for="dataType1"> Integer</label><br>
+        <input type="radio" name="datatype" id="dataType2" value="2">
+        <label for="dataType2"> Float</label><br>
+        <input type="radio" name="datatype" id="dataType3" value="3">
+        <label for="dataType3"> Double</label><br><br>
+        <label for="getArraySize"><b>Max size of array:</b></label><br>
+        <input type="text" name="arraySize" id="getArraySize" placeholder="between 1 and 10000" size="26" required><br><br>
+        <label for="getIndex"><b>Index to search for:</b></label><br>
+        <input type="text" name="searchIndex" id="getIndex" placeholder="smaller than max array size" size="26" required><br><br>
+        <button class="button" type="submit" id="submit" value="Start Test"> Send </button>
+        <br><br>
+        <p id="parameters"></p>
+    </form>
+    <a id="result" href="http://127.0.0.1:8008/cgi-bin/results.json"></a>
+    <br>
+</section>
+</body>
+</html>

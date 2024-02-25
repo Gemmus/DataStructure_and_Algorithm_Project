@@ -1,3 +1,0 @@
-C:/Users/Gemma/Desktop/Projects/DataStructAlg/cmake-build-debug/CMakeFiles/DataStructAlg.dir
-C:/Users/Gemma/Desktop/Projects/DataStructAlg/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Gemma/Desktop/Projects/DataStructAlg/cmake-build-debug/CMakeFiles/rebuild_cache.dir

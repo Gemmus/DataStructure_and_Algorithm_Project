@@ -14,6 +14,7 @@
 #include "04_double_linked_list.h"
 #include "05_custom_binary_tree.h"
 #include "06_STL_binary_tree.h"
+#include "07_hash_table.h"
 #include "random_generator.h"
 
 #define RANDOM_MIN      0
@@ -24,9 +25,9 @@
 using namespace std;
 using json = nlohmann::json;
 
-                                        /***************************/
-                                        /*       APPLICATION       */
-                                        /***************************/
+/***************************/
+/*       APPLICATION       */
+/***************************/
 
 /*********************************************/
 /*  STRUCT TO STORE EACH MEASUREMENT VALUES  */
@@ -49,6 +50,7 @@ static timeData        doublyLin;
 static timeData        doublyBin;
 static timeData        customBin;
 static timeData           STLBin;
+static timeData          hashLin;
 
 /***************************/
 /*  FUNCTION DECLARATIONS  */
@@ -56,22 +58,18 @@ static timeData           STLBin;
 /* For searching elements */
 template <typename T>
 void arraySearch(const vector<T>& Data, const T& searchValue, const int& mode, timeData& dataStruct);
-
 template <typename T>
 void circArraySearch(const vector<T>& Data, const T& searchValue, const int& mode, timeData& dataStruct);
-
 template <typename T>
 void linkedListSearch(const vector<T>& Data, const T& searchValue, const int& mode, timeData& dataStruct);
-
 template <typename T>
 void doubleLinkedListSearch(const vector<T>& Data, const T& searchValue, const int& mode, timeData& dataStruct);
-
 template <typename T>
 void customBinarySearch(const vector<T>& Data, const T& searchValue, timeData& dataStruct);
-
 template <typename T>
 void STLBinarySearch(const vector<T>& Data, const T& searchValue, timeData& dataStruct);
-
+template <typename T>
+void hashTableSearch(const vector<T>& Data, const T& searchValue, timeData& dataStruct, const int& arraySize);
 /* Others */
 void extractJSON(const string& jsonData, int& dataType, int& arraySize, int& searchIndex);
 void displayMeasuredTimes(const timeData& dataStruct);
@@ -80,8 +78,8 @@ void headerPrinter(const int& dataType, const int& arraySize, const int& searchI
 /***************************/
 /*          MAIN           */
 /***************************/
-
 int main(int argc, char **argv) {
+
     /********************/
     /*  SEEDING RANDOM  */
     /********************/
@@ -97,6 +95,7 @@ int main(int argc, char **argv) {
     /**********************/
     /*    EXTRACT JSON    */
     /**********************/
+
     if (argc >= 2) {
         FILE *argfile = fopen(argv[1], "rb");
         if (argfile != nullptr) {
@@ -105,6 +104,7 @@ int main(int argc, char **argv) {
             if (readcount > 0) {
                 argbuf[readcount] = 0;
                 extractJSON(argbuf, dataType, arraySize, searchIndex);
+                //cout << "Datatype: " << dataType << " , array size: " << arraySize << " ,index to search for: " << searchIndex << endl;
             }
             fclose(argfile);
         }
@@ -113,14 +113,14 @@ int main(int argc, char **argv) {
     /******************************/
     /*  ACTION BASED ON DATATYPE  */
     /******************************/
-
     if (dataType == 1) {
         /* PRINT HEADER */
         headerPrinter(dataType, arraySize, searchIndex);
-      
+
         /*  GENERATE RANDOM TEST DATA  */
         vector<int> IntRandData(arraySize);
         generate(IntRandData.begin(), IntRandData.end(), RandomGenerator<float>(RANDOM_MIN, RANDOM_MAX));
+        //copy(IntRandData.begin(), IntRandData.end(), ostream_iterator<float> (cout, " "));
         int searchedValue = IntRandData[searchIndex];
 
         /*       ARRAY       */
@@ -144,7 +144,10 @@ int main(int argc, char **argv) {
 
         /* STL BINARY SEARCH TREE */
         STLBinarySearch(IntRandData, searchedValue, STLBin);
-
+        
+        /* HASH TABLE */
+        hashTableSearch(IntRandData, searchedValue, hashLin, arraySize);
+        
     } else if (dataType == 2) {
         /* PRINT HEADER */
         headerPrinter(dataType, arraySize, searchIndex);
@@ -152,6 +155,7 @@ int main(int argc, char **argv) {
         /*  GENERATE RANDOM TEST DATA  */
         vector<float> FloatRandData(arraySize);
         generate(FloatRandData.begin(), FloatRandData.end(), RandomGenerator<float>(RANDOM_MIN, RANDOM_MAX));
+        //copy(FloatRandData.begin(), FloatRandData.end(), ostream_iterator<float> (cout, " "));
         float floatSearchValue = FloatRandData[searchIndex];
 
         /*       ARRAY       */
@@ -175,7 +179,10 @@ int main(int argc, char **argv) {
 
         /* STL BINARY SEARCH TREE */
         STLBinarySearch(FloatRandData, floatSearchValue, STLBin);
-
+        
+        /* HASH TABLE */
+        hashTableSearch(FloatRandData, floatSearchValue, hashLin, arraySize);
+        
     } else if (dataType == 3) {
         /* PRINT HEADER */
         headerPrinter(dataType, arraySize, searchIndex);
@@ -183,6 +190,7 @@ int main(int argc, char **argv) {
         /*  GENERATE RANDOM TEST DATA  */
         vector<double> DoubleRandData(arraySize);
         generate(DoubleRandData.begin(), DoubleRandData.end(), RandomGenerator<float>(RANDOM_MIN, RANDOM_MAX));
+        //copy(DoubleRandData.begin(), DoubleRandData.end(), ostream_iterator<float> (cout, " "));
         double doubleSearchValue = DoubleRandData[searchIndex];
 
         /*       ARRAY       */
@@ -206,6 +214,9 @@ int main(int argc, char **argv) {
 
         /* STL BINARY SEARCH TREE */
         STLBinarySearch(DoubleRandData, doubleSearchValue, STLBin);
+        
+        /* HASH TABLE */
+        hashTableSearch(DoubleRandData, doubleSearchValue, hashLin, arraySize);
     }
 
     return 0;
@@ -487,7 +498,6 @@ void customBinarySearch(const vector<T>& Data, const T& searchValue, timeData& d
     /* Calculate and display mean */
     dataStruct.mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double) execTimes.size();
     displayMeasuredTimes(dataStruct);
-
 }
 
 template <typename T>
@@ -525,8 +535,45 @@ void STLBinarySearch(const vector<T>& Data, const T& searchValue, timeData& data
     displayMeasuredTimes(dataStruct);
 }
 
+template <typename T>
+void hashTableSearch(const vector<T>& Data, const T& searchValue, timeData& dataStruct, const int& arraySize) {
+    vector<double>          execTimes;
+    HashTable<T, T>         hashTable(arraySize*2);
+    T                       value;
+
+    /* Display header */
+    cout << setw(20) << right << "hash table |" << setw(9) << right << "linear |";
+    /* Initialize array */
+    auto start = chrono::high_resolution_clock::now();
+    for (const auto &each : Data) {
+        hashTable.insert(each, each);
+    }
+    auto end = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+    dataStruct.insertionTime = static_cast<double>(duration.count());
+    /* Measure execution times */
+    for (int i = 0; i < measureN; i++) {
+        start = chrono::high_resolution_clock::now();
+        bool retval = hashTable.find(searchValue, value);
+        end = chrono::high_resolution_clock::now();
+        duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
+        if (retval) {
+            execTimes.push_back(static_cast<double>(duration.count()));
+        }
+    }
+
+    /* Sort and discard largest 1/3 */
+    sort(execTimes.begin(), execTimes.end());
+    execTimes.erase(execTimes.end() - static_cast<int>(measureN / 3), execTimes.end());
+
+    /* Calculate and display mean */
+    dataStruct.mean = accumulate(execTimes.begin(), execTimes.end(), 0.0) / (double) execTimes.size();
+    displayMeasuredTimes(dataStruct);
+}
+
 void extractJSON(const string& jsonData, int& dataType, int& arraySize, int& searchIndex) {
     json j = json::parse(jsonData); // Parse the JSON string
+
     if (j.find("dataType") != j.end() && j["dataType"].is_number_integer()) {
         dataType = j["dataType"];
     }
@@ -534,7 +581,7 @@ void extractJSON(const string& jsonData, int& dataType, int& arraySize, int& sea
     if (j.find("arraySize") != j.end() && j["arraySize"].is_number_integer()) {
         arraySize = j["arraySize"];
     }
-  
+
     if (j.find("searchIndex") != j.end() && j["searchIndex"].is_number_integer()) {
         searchIndex = j["searchIndex"];
     }
@@ -557,13 +604,11 @@ void headerPrinter(const int& dataType, const int& arraySize, const int& searchI
         cout << "-----------------------------------------------------------------------------" << endl;
         cout << "--------   FLOAT, MAX ARRAY SIZE: " << setw(5) << left << arraySize << ", INDEX TO SEARCH FOR: " << setw(5) << left << searchIndex << "   -------" << endl;
         cout << "-----------------------------------------------------------------------------" << endl;
-
     } else if (dataType == 3) {
         cout << "-----------------------------------------------------------------------------" << endl;
         cout << "--------   DOUBLE, MAX ARRAY SIZE: " << setw(5) << left << arraySize << ", INDEX TO SEARCH FOR: " << setw(5) << left << searchIndex << "  -------" << endl;
         cout << "-----------------------------------------------------------------------------" << endl;
     }
-
     cout << setw(20) << right << "Data Structure |" << setw(9) << right << " Search |" <<
     setw(12) << right << " Insertion Time |" << setw(10) << right << "  Search Time |" << setw(12) << right << "   Overall Time" << endl;
     cout << "-----------------------------------------------------------------------------" << endl;

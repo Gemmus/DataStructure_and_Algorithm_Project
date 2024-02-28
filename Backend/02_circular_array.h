@@ -128,7 +128,7 @@ bool CircList<T>::insertOrdered(T item) {
         return true;
     }
 
-    int i = last - 1;
+    int i = last;
     while (i >= 0 && array[i] > item) {
         array[i + 1] = array[i];
         i--;
